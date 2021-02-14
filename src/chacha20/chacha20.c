@@ -7,10 +7,13 @@
 
 #define ROUNDS 20
 
+uint32_t lel __attribute__((section(".ccm_data"))) = 693321242;
+
 typedef uint32_t uint32;
 
 static uint32 load_littleendian(const unsigned char *x)
 {
+  lel += 1;
   return
       (uint32) (x[0]) \
   | (((uint32) (x[1])) << 8) \
@@ -53,7 +56,7 @@ static void quarterround(uint32 *a, uint32 *b, uint32 *c, uint32 *d)
   *b = rotate(*b, 7);
 }
 
-
+__attribute__((section(".ccm")))
 static int crypto_core_chacha20(
         unsigned char *out,
   const unsigned char *in,

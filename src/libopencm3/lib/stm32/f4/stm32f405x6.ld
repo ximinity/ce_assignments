@@ -29,6 +29,15 @@ MEMORY
 	ccm (rwx) : ORIGIN = 0x10000000, LENGTH = 64K
 }
 
+SECTIONS
+{
+	.ccm : {
+		*(.ccm*) . = ALIGN(4);
+		*(.ccm_data*) . = ALIGN(4);
+		*(.ccm_rodata*) . = ALIGN(4);
+		*(.ccm_bss*) . = ALIGN(4);
+	} >ccm
+}
+
 /* Include the common ld script. */
 INCLUDE cortex-m-generic.ld
-
