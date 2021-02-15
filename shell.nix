@@ -12,6 +12,8 @@ in pkgs.mkShell {
     stlink
     python38
     python38Packages.pyserial
+    qemu
+    qemu-utils
     vscode-with-extensions
   ];
 }
