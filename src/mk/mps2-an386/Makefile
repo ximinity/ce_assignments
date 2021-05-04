@@ -10,6 +10,7 @@ SIZE := $(CROSS_PREFIX)-size
 
 LDSCRIPT = $(OBJDIR)/ldscript.ld
 
+ARCH_COMMON_FLAGS += -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 ARCH_FLAGS += -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 ARFLAGS = rcs
 

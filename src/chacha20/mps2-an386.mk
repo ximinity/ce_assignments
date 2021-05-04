@@ -7,10 +7,13 @@ include ../mk/mps2-an386/Makefile
 %.bin: %.elf
 	$(OBJCOPY) -Obinary $(*).elf $(*).bin
 
-obj/chacha20test.elf: obj/chacha20.o obj/test_hal.o $(LINKDEPS) | obj
-		$(LD) -o $@ obj/test_hal.o obj/chacha20.o $(LDFLAGS) $(LDLIBS)
+obj/chacha20test.elf: obj/chacha20.o obj/test_hal.o obj/chacha20s.o $(LINKDEPS) | obj
+		$(LD) -o $@ obj/test_hal.o obj/chacha20.o obj/chacha20s.o $(LDFLAGS) $(LDLIBS)
 
 obj/chacha20.o: chacha20.c | obj
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+obj/chacha20s.o: chacha20.s | obj
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 obj/test_hal.o: test_hal.c | obj
