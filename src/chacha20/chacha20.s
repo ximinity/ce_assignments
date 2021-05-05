@@ -1,193 +1,176 @@
 .syntax unified
 .set ROUNDS, 20
 
-.section .ccm, "ax"
-.global double_fullround
-double_fullround:
+.macro DOUBLE_FULLROUND
     // Main optimization for fullround is that we can
     // replace the rotate function with a single ror
     // instruction. We also do as much intermediate
     // stores to ensure the pipeline is filled.
-    push    {r4, r5, r6, r7, r8, r10, r11, r12, lr}
-    mov     r8, r0
-    mov     r10, r1
-    mov     r11, r2
-    mov     r12, r3
-
-    ldr     r4, [r8]
-    ldr     r5, [r10]
-    ldr     r6, [r11]
-    ldr     r7, [r12]
+    ldr     r4, [r0]
+    ldr     r5, [r1]
+    ldr     r6, [r2]
+    ldr     r7, [r3]
     add     r4, r4, r5
     eor     r7, r7, r4
-    ror     r7, r7, #16
-    add     r6, r6, r7
+    add     r6, r6, r7, ror #16
     eor     r5, r5, r6
-    ror     r5, r5, #20
+    add     r4, r4, r5, ror #20
+    str     r4,  [r0]
+    eor     r7, r4, r7, ror #16
+    str     r7, [r3]
+    add     r6, r6, r7, ror #24
+    str     r6, [r2]
+    eor     r5, r6, r5, ror #20
+    str     r5, [r1]
+
+    ldr     r4, [r0,  #4]
+    ldr     r5, [r1, #4]
+    ldr     r6, [r2, #4]
+    ldr     r7, [r3, #4]
     add     r4, r4, r5
-    str     r4,  [r8]
     eor     r7, r7, r4
+    add     r6, r6, r7, ror #16
+    eor     r5, r5, r6
+    add     r4, r4, r5, ror #20
+    str     r4,  [r0, #4]
+    eor     r7, r4, r7, ror #16
+    str     r7, [r3, #4]
+    add     r6, r6, r7, ror #24
+    str     r6, [r2, #4]
+    eor     r5, r6, r5, ror #20
+    str     r5, [r1, #4]
+
+    ldr     r4, [r0,  #8]
+    ldr     r5, [r1, #8]
+    ldr     r6, [r2, #8]
+    ldr     r7, [r3, #8]
+    add     r4, r4, r5
+    eor     r7, r7, r4
+    add     r6, r6, r7, ror #16
+    eor     r5, r5, r6
+    add     r4, r4, r5, ror #20
+    str     r4,  [r0, #8]
+    eor     r7, r4, r7, ror #16
+    str     r7, [r3, #8]
+    add     r6, r6, r7, ror #24
+    str     r6, [r2, #8]
+    eor     r5, r6, r5, ror #20
+    str     r5, [r1, #8]
+
+    ldr     r4, [r0,  #12]
+    ldr     r5, [r1, #12]
+    ldr     r6, [r2, #12]
+    ldr     r7, [r3, #12]
+    add     r4, r4, r5
+    eor     r7, r4, r7
+    add     r6, r6, r7, ror #16
+    eor     r5, r5, r6
+    add     r4, r4, r5, ror #20
+    str     r4,  [r0, #12]
+    eor     r7, r4, r7, ror #16
+    str     r7, [r3, #12]
+    add     r6, r6, r7, ror #24
+    str     r6, [r2, #12]
+    eor     r5, r6, r5, ror #20
+    str     r5, [r1, #12]
+
+    ldr     r4, [r0]
+    ldr     r5, [r1, #4]
+    ldr     r6, [r2, #8]
+    ldr     r7, [r3, #12]
+    add     r4, r4, r5, ror #25
+    eor     r7, r4, r7, ror #24
+    add     r6, r6, r7, ror #16
+    eor     r5, r6, r5, ror #25
+    add     r4, r4, r5, ror #20
+    str     r4,  [r0]
+    eor     r7, r4, r7, ror #16
     ror     r7, r7, #24
-    str     r7, [r12]
+    str     r7, [r3, #12]
     add     r6, r6, r7
-    str     r6, [r11]
-    eor     r5, r5, r6
+    str     r6, [r2, #8]
+    eor     r5, r6, r5, ror #20
     ror     r5, r5, #25
-    str     r5, [r10]
+    str     r5, [r1, #4]
 
-    ldr     r4, [r8,  #4]
-    ldr     r5, [r10, #4]
-    ldr     r6, [r11, #4]
-    ldr     r7, [r12, #4]
-    add     r4, r4, r5
-    eor     r7, r7, r4
-    ror     r7, r7, #16
-    add     r6, r6, r7
-    eor     r5, r5, r6
-    ror     r5, r5, #20
-    add     r4, r4, r5
-    str     r4,  [r8, #4]
-    eor     r7, r7, r4
+    ldr     r4, [r0,  #4]
+    ldr     r5, [r1, #8]
+    ldr     r6, [r2, #12]
+    ldr     r7, [r3]
+    add     r4, r4, r5, ror #25
+    eor     r7, r4, r7, ror #24
+    add     r6, r6, r7, ror #16
+    eor     r5, r6, r5, ror #25
+    add     r4, r4, r5, ror #20
+    str     r4,  [r0, #4]
+    eor     r7, r4, r7, ror #16
     ror     r7, r7, #24
-    str     r7, [r12, #4]
+    str     r7, [r3]
     add     r6, r6, r7
-    str     r6, [r11, #4]
-    eor     r5, r5, r6
+    str     r6, [r2, #12]
+    eor     r5, r6, r5, ror #20
     ror     r5, r5, #25
-    str     r5, [r10, #4]
+    str     r5, [r1, #8]
 
-    ldr     r4, [r8,  #8]
-    ldr     r5, [r10, #8]
-    ldr     r6, [r11, #8]
-    ldr     r7, [r12, #8]
-    add     r4, r4, r5
-    eor     r7, r7, r4
-    ror     r7, r7, #16
-    add     r6, r6, r7
-    eor     r5, r5, r6
-    ror     r5, r5, #20
-    add     r4, r4, r5
-    str     r4,  [r8, #8]
-    eor     r7, r7, r4
+    ldr     r4, [r0,  #8]
+    ldr     r5, [r1, #12]
+    ldr     r6, [r2]
+    ldr     r7, [r3, #4]
+    add     r4, r4, r5, ror #25
+    eor     r7, r4, r7, ror #24
+    add     r6, r6, r7, ror #16
+    eor     r5, r6, r5, ror #25
+    add     r4, r4, r5, ror #20
+    str     r4,  [r0, #8]
+    eor     r7, r4, r7, ror #16
     ror     r7, r7, #24
-    str     r7, [r12, #8]
+    str     r7, [r3, #4]
     add     r6, r6, r7
-    str     r6, [r11, #8]
-    eor     r5, r5, r6
+    str     r6, [r2]
+    eor     r5, r6, r5, ror #20
     ror     r5, r5, #25
-    str     r5, [r10, #8]
+    str     r5, [r1, #12]
 
-    ldr     r4, [r8,  #12]
-    ldr     r5, [r10, #12]
-    ldr     r6, [r11, #12]
-    ldr     r7, [r12, #12]
-    add     r4, r4, r5
-    eor     r7, r7, r4
-    ror     r7, r7, #16
-    add     r6, r6, r7
-    eor     r5, r5, r6
-    ror     r5, r5, #20
-    add     r4, r4, r5
-    str     r4,  [r8, #12]
-    eor     r7, r7, r4
+    ldr     r4, [r0,  #12]
+    ldr     r5, [r1]
+    ldr     r6, [r2, #4]
+    ldr     r7, [r3, #8]
+    add     r4, r4, r5, ror #25
+    eor     r7, r4, r7, ror #24
+    add     r6, r6, r7, ror #16
+    eor     r5, r6, r5, ror #25
+    add     r4, r4, r5, ror #20
+    str     r4,  [r0, #12]
+    eor     r7, r4, r7, ror #16
     ror     r7, r7, #24
-    str     r7, [r12, #12]
+    str     r7, [r3, #8]
     add     r6, r6, r7
-    str     r6, [r11, #12]
-    eor     r5, r5, r6
+    str     r6, [r2, #4]
+    eor     r5, r6, r5, ror #20
     ror     r5, r5, #25
-    str     r5, [r10, #12]
+    str     r5, [r1]
+.endm
 
-    ldr     r4, [r8]
-    ldr     r5, [r10, #4]
-    ldr     r6, [r11, #8]
-    ldr     r7, [r12, #12]
-    add     r4, r4, r5
-    eor     r7, r7, r4
-    ror     r7, r7, #16
-    add     r6, r6, r7
-    eor     r5, r5, r6
-    ror     r5, r5, #20
-    add     r4, r4, r5
-    str     r4,  [r8]
-    eor     r7, r7, r4
-    ror     r7, r7, #24
-    str     r7, [r12, #12]
-    add     r6, r6, r7
-    str     r6, [r11, #8]
-    eor     r5, r5, r6
-    ror     r5, r5, #25
-    str     r5, [r10, #4]
-
-    ldr     r4, [r8,  #4]
-    ldr     r5, [r10, #8]
-    ldr     r6, [r11, #12]
-    ldr     r7, [r12]
-    add     r4, r4, r5
-    eor     r7, r7, r4
-    ror     r7, r7, #16
-    add     r6, r6, r7
-    eor     r5, r5, r6
-    ror     r5, r5, #20
-    add     r4, r4, r5
-    str     r4,  [r8, #4]
-    eor     r7, r7, r4
-    ror     r7, r7, #24
-    str     r7, [r12]
-    add     r6, r6, r7
-    str     r6, [r11, #12]
-    eor     r5, r5, r6
-    ror     r5, r5, #25
-    str     r5, [r10, #8]
-
-    ldr     r4, [r8,  #8]
-    ldr     r5, [r10, #12]
-    ldr     r6, [r11]
-    ldr     r7, [r12, #4]
-    add     r4, r4, r5
-    eor     r7, r7, r4
-    ror     r7, r7, #16
-    add     r6, r6, r7
-    eor     r5, r5, r6
-    ror     r5, r5, #20
-    add     r4, r4, r5
-    str     r4,  [r8, #8]
-    eor     r7, r7, r4
-    ror     r7, r7, #24
-    str     r7, [r12, #4]
-    add     r6, r6, r7
-    str     r6, [r11]
-    eor     r5, r5, r6
-    ror     r5, r5, #25
-    str     r5, [r10, #12]
-
-    ldr     r4, [r8,  #12]
-    ldr     r5, [r10]
-    ldr     r6, [r11, #4]
-    ldr     r7, [r12, #8]
-    add     r4, r4, r5
-    eor     r7, r7, r4
-    ror     r7, r7, #16
-    add     r6, r6, r7
-    eor     r5, r5, r6
-    ror     r5, r5, #20
-    add     r4, r4, r5
-    str     r4,  [r8, #12]
-    eor     r7, r7, r4
-    ror     r7, r7, #24
-    str     r7, [r12, #8]
-    add     r6, r6, r7
-    str     r6, [r11, #4]
-    eor     r5, r5, r6
-    ror     r5, r5, #25
-    str     r5, [r10]
-
-    pop     {r4, r5, r6, r7, r8, r10, r11, r12, lr}
+//.section .ccm, "ax"
+.global ten_double_fullround
+ten_double_fullround:
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
+    DOUBLE_FULLROUND
     bx      lr
+
 
 .global crypto_core_chacha20
 crypto_core_chacha20:
     push {r0, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
+
     ldr r0, =x
     ldr r9, =j
     // `load_littleendian` loads
@@ -246,24 +229,14 @@ crypto_core_chacha20:
     str r12, [r9, #60]
 
     // Run 10x double fullrounds
-    mov r5, r0
-    add r6, r0, #16
-    add r7, r0, #32
-    add r8, r0, #48
-    mov r4, #ROUNDS
-.core_loop_cond:
-    cmp r4, #1
-    blt .core_loop_done
-.core_loop_inner:
-    mov r0, r5
-    mov r1, r6
-    mov r2, r7
-    mov r3, r8
-    bl double_fullround
-.core_loop_incr:
-    sub r4, r4, #2
-    b .core_loop_cond
-.core_loop_done:
+    // We do not have to keep setting
+    // r0 to r3 because double_fullround
+    // does not set these registers
+    add r1, r0, #16
+    add r2, r0, #32
+    add r3, r0, #48
+
+    bl ten_double_fullround
 
     // This is adding every element in j to x.
     // The original code stored this result in x
@@ -271,7 +244,7 @@ crypto_core_chacha20:
     // read out afterwards. So we just load
     // every element from x and j, add them and
     // then store them directly into out.
-    mov r1, r5
+    mov r1, r0
     mov r2, r9
     pop {r0}
     // Load 5 initial

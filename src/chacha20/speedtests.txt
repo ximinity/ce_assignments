@@ -1,0 +1,19 @@
+unmodified c: 33538
+initial ASM: 39823
+inline doubleround loop: 38334 (38783)
+use c double full round: 63983
+use barrel shifter during eor in double full round for 2/32 rors:  38463
+use barrel shifter during eor in double full round for 24/32 rors: 35263  
+Do not push registers to stack in double full round: 30786
+Macrofy  double full round with loop: 31423
+replace LDR/STR with LDM STM where possible: 30956
+replace mov with ldr x,y: 30802
+replace push/pop r0 with move: 30849
+replace with ldrd: 30881
+Specify word alignment of x, j: 30849
+Use manual str instead of push: 31135
+Use stmdb instead of many str: 30865
+Half inline double full round half branch: 30655
+inline 5x Double full round into five double full function: 30272
+inline 10x Double full round into ten double full function: 30207
+remove movs in double_fullround macro: 28431

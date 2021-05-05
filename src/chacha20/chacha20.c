@@ -5,8 +5,10 @@
 #include <stdint.h>
 #include "chacha20.h"
 
-uint32_t x[16] __attribute__((section(".ccm_data"))) = { 0 };
-uint32_t j[16] __attribute__((section(".ccm_data"))) = { 0 };
+typedef uint32_t uint32;
+
+uint32_t x[16] /*__attribute__((section(".ccm_data")))*/ = { 0 };
+uint32_t j[16] /*__attribute__((section(".ccm_data")))*/ = { 0 };
 
 int crypto_core_chacha20(
         unsigned char *out,
@@ -15,12 +17,12 @@ int crypto_core_chacha20(
   const unsigned char *c
 );
 
-static const unsigned char __attribute__((section(".ccm_rodata"))) sigma[16] = "expand 32-byte k";
-static unsigned char in[16] __attribute__((section(".ccm_data"))) = { 0 };
-static unsigned char block[64] __attribute__((section(".ccm_data"))) = { 0 };
-static unsigned char kcopy[32] __attribute__((section(".ccm_data"))) = { 0 };
+static const unsigned char /*__attribute__((section(".ccm_rodata")))*/ sigma[16] = "expand 32-byte k";
+static unsigned char in[16] /*__attribute__((section(".ccm_data")))*/ = { 0 };
+static unsigned char block[64] /*__attribute__((section(".ccm_data")))*/ = { 0 };
+static unsigned char kcopy[32] /*__attribute__((section(".ccm_data")))*/ = { 0 };
 
-__attribute__((section(".ccm")))
+/*__attribute__((section(".ccm")))*/
 int crypto_stream_chacha20(unsigned char *c,unsigned long long clen, const unsigned char *n, const unsigned char *k)
 {
   unsigned long long i;
