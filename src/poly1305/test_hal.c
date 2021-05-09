@@ -49,12 +49,65 @@ unsigned char tag[POLY1305_BYTES];
 unsigned char key[POLY1305_KEYBYTES] = {
   0x57, 0x6c, 0x7c, 0x77, 0x6a, 0xc2, 0x93, 0xc6, 0x78, 0x3a, 0x4a, 0x48, 0xc9, 0x45, 0x20, 0x36};
 
+static void test_add_radix26()
+{
+  num_radix_26 a, b, c;
+  char outstr[128];
+
+  hal_send_str("testing radix 26 addition");
+
+  a.limbs[0] = 0x3083403;
+  a.limbs[1] = 0x3083403;
+  a.limbs[2] = 0x3083403;
+  a.limbs[3] = 0x3083403;
+  a.limbs[4] = 0x3083403;
+
+  b.limbs[0] = 0x3083403;
+  b.limbs[1] = 0x3083403;
+  b.limbs[2] = 0x3083403;
+  b.limbs[3] = 0x3083403;
+  b.limbs[4] = 0x3083403;
+
+  radix_26_add(&a, &b, &c);
+
+  sprintf(outstr, "\nc[0] %lu\nc[1] %lu\nc[2] %lu\nc[3] %lu\nc[4] %lu\n", 
+    c.limbs[0], c.limbs[1], c.limbs[2], c.limbs[3], c.limbs[4]);
+    hal_send_str(outstr);
+}
+
+static void test_mulmod_radix26()
+{
+  num_radix_26 a, b, c;
+  char outstr[128];
+
+  hal_send_str("testing radix 26 mulmod");
+
+  a.limbs[0] = 1 << 13;
+  a.limbs[1] = 1 << 13;
+  a.limbs[2] = 0;
+  a.limbs[3] = 0;
+  a.limbs[4] = 0;
+
+  b.limbs[0] = 1 << 13;
+  b.limbs[1] = 1 << 13;
+  b.limbs[2] = 0;
+  b.limbs[3] = 0;
+  b.limbs[4] = 0;
+
+  radix_26_mulmod(&a, &b, &c);
+
+  sprintf(outstr, "\nc[0] %lx\nc[1] %lx\nc[2] %lx\nc[3] %lx\nc[4] %lx\n", 
+    c.limbs[0], c.limbs[1], c.limbs[2], c.limbs[3], c.limbs[4]);
+    hal_send_str(outstr);
+}
+
 int main(void)
 {
+
   hal_setup(CLOCK_FAST);
 
   hal_send_str("\n============ IGNORE OUTPUT BEFORE THIS LINE ============\n");
-
+  test_mulmod_radix26();
   crypto_onetimeauth_poly1305(tag,msg,INLEN,key);
 
   int i;
