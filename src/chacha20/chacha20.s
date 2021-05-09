@@ -1,5 +1,36 @@
 .syntax unified
 
+.macro QUARTERROUND_1 x,a,b,c,d,stAddr,ldAddr
+    add     \a, \a, \b
+    eor     \d, \d, \a
+    add     \c, \c, \d, ror #16
+    eor     \b, \b, \c
+    add     \a, \a, \b, ror #20
+    str     \a, [\x, \stAddr]
+    eor     \d, \a, \d, ror #16
+    add     \c, \c, \d, ror #24
+    ldr     \a, [\x, \ldAddr]
+    eor     \b, \c, \b, ror #20
+.endm
+
+.macro QUARTERROUND_2 x,a,b,c,d,stAddr,ldAddr,ldNext
+    add     \a, \a, \b, ror #25
+    eor     \d, \a, \d, ror #24
+    add     \c, \c, \d, ror #16
+    eor     \b, \c, \b, ror #25
+    add     \a, \a, \b, ror #20
+    str     \a, [\x, \stAddr]
+    eor     \d, \a, \d, ror #16
+    add     \c, \c, \d, ror #24
+    ror     \d, \d, #24
+.if \ldNext
+    ldr     \a, [\x, \ldAddr]
+.endif
+    eor     \b, \c, \b, ror #20
+    ror     \b, \b, #25
+.endm
+
+
 .macro DOUBLE_FULLROUND
     // Main optimization for fullround is that we can
     // a great deal of rotates with the barrel shifter
@@ -26,125 +57,25 @@
     //    - 4 less ror instructions.
     // We have chosen to have 4 less ror instructions.
 
-    @ First quarterround
-    @ a = r12, b = r4, c = r8, d = lr
     ldr     r12, [r0, #0]
 
-    add     r12, r12, r4
-    eor     lr, lr, r12
-    add     r8, r8, lr, ror #16
-    eor     r4, r4, r8
-    add     r12, r12, r4, ror #20
-    str     r12, [r0, #0]
-    eor     lr, r12, lr, ror #16
-    add     r8, r8, lr, ror #24
-    ldr     r12, [r0, #4]
-    eor     r4, r8, r4, ror #20
+    QUARTERROUND_1 r0, r12, r4, r8,  lr, #0,  #4
+    QUARTERROUND_1 r0, r12, r5, r9,  r1, #4,  #8
+    QUARTERROUND_1 r0, r12, r6, r10, r2, #8,  #12
+    QUARTERROUND_1 r0, r12, r7, r11, r3, #12, #0
 
-    // Second quarterround
-    // a = r12, b = r5, c = r9, d = r1
-    add     r12, r12, r5
-    eor     r1, r1, r12
-    add     r9, r9, r1, ror #16
-    eor     r5, r5, r9
-    add     r12, r12, r5, ror #20
-    eor     r1, r12, r1, ror #16
-    str     r12, [r0, #4]
-    add     r9, r9, r1, ror #24
-    ldr     r12, [r0, #8]
-    eor     r5, r9, r5, ror #20
+    QUARTERROUND_2 r0, r12, r5, r10, r3, #0,  #4,  1
+    QUARTERROUND_2 r0, r12, r6, r11, lr, #4,  #8,  1
+    QUARTERROUND_2 r0, r12, r7, r8,  r1, #8,  #12, 1
+    QUARTERROUND_2 r0, r12, r4, r9,  r2, #12, #0,  0
 
-    // Third quarterround
-    // a = r12, b = r6, c = r10, d = r2
-    add     r12, r12, r6
-    eor     r2, r2, r12
-    add     r10, r10, r2, ror #16
-    eor     r6, r6, r10
-    add     r12, r12, r6, ror #20
-    str     r12, [r0, #8]
-    eor     r2, r12, r2, ror #16
-    add     r10, r10, r2, ror #24
-    ldr     r12, [r0, #12]
-    eor     r6, r10, r6, ror #20
-
-    // Fourth quarterround
-    // a = r12, b = r7, c = r11, d = r3
-    add     r12, r12, r7
-    eor     r3, r3, r12
-    add     r11, r11, r3, ror #16
-    eor     r7, r7, r11
-    add     r12, r12, r7, ror #20
-    str     r12, [r0, #12]
-    eor     r3, r12, r3, ror #16
-    add     r11, r11, r3, ror #24
-    ldr     r12, [r0, #0]
-    eor     r7, r11, r7, ror #20
-
-    // Fifth quarterround
-    // a = r12, b = r5, c = r10, d = r3
-    add     r12, r12, r5, ror #25
-    eor     r3, r12, r3, ror #24
-    add     r10, r10, r3, ror #16
-    eor     r5, r10, r5, ror #25
-    add     r12, r12, r5, ror #20
-    str     r12, [r0, #0]
-    eor     r3, r12, r3, ror #16
-    add     r10, r10, r3, ror #24
-    ror     r3, r3, #24
-    ldr     r12, [r0, #4]
-    eor     r5, r10, r5, ror #20
-    ror     r5, r5, #25
-
-    // Sixth quarterround
-    // a = r12, b = r6, c = r11, d = lr
-    add     r12, r12, r6, ror #25
-    eor     lr, r12, lr, ror #24
-    add     r11, r11, lr, ror #16
-    eor     r6, r11, r6, ror #25
-    add     r12, r12, r6, ror #20
-    str     r12, [r0, #4]
-    eor     lr, r12, lr, ror #16
-    add     r11, r11, lr, ror #24
-    ror     lr, lr, #24    
-    ldr     r12, [r0, #8]
-    eor     r6, r11, r6, ror #20
-    ror     r6, r6, #25
-
-    // Seventh quarterround
-    // a = r12, b = r7, c = r8, d = r1
-    add     r12, r12, r7, ror #25
-    eor     r1, r12, r1, ror #24
-    add     r8, r8, r1, ror #16
-    eor     r7, r8, r7, ror #25
-    add     r12, r12, r7, ror #20
-    str     r12, [r0, #8]
-    eor     r1, r12, r1, ror #16
-    add     r8, r8, r1, ror #24
-    ror     r1, r1, #24
-    ldr     r12, [r0, #12]
-    eor     r7, r8, r7, ror #20
-    ror     r7, r7, #25
-
-    // Eighth quarterround
-    // a = r12, b = r4, c = r9, d = r2
-    add     r12, r12, r4, ror #25
-    eor     r2, r12, r2, ror #24
-    add     r9, r9, r2, ror #16
-    eor     r4, r9, r4, ror #25
-    add     r12, r12, r4, ror #20
-    str     r12, [r0, #12]
-    eor     r2, r12, r2, ror #16
-    add     r9, r9, r2, ror #24
-    ror     r2, r2, #24
-    eor     r4, r9, r4, ror #20
-    ror     r4, r4, #25
 .endm
 
 //.section .ccm, "ax"
 .global ten_double_fullround
 ten_double_fullround:
     push    {lr}
-    // Load x4-x16 into registers
+    // Load x4-x15 into registers
     ldr     r4,  [r0, #16]
     ldr     r5,  [r0, #20]
     ldr     r6,  [r0, #24]
@@ -189,37 +120,37 @@ ten_double_fullround:
 crypto_core_chacha20:
     push {r0, r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
 
-    ldr r0, =x
-    ldr r9, =j
+    ldr r0,  =x
+    ldr r9,  =j
     // `load_littleendian` loads
     // Since our platform is little endian
     // We can just do LDR without any manual
     // endian conversion.
     // We do intermediate loads and stores as much
     // as possible to achieve maximum pipelining
-    ldr r4, [r3] 
-    ldr r5, [r3, #4] 
-    ldr r6, [r3, #8] 
-    ldr r7, [r3, #12] 
-    ldr r8, [r2] 
+    ldr r4,  [r3] 
+    ldr r5,  [r3, #4] 
+    ldr r6,  [r3, #8] 
+    ldr r7,  [r3, #12] 
+    ldr r8,  [r2] 
     ldr r10, [r2, #4] 
     ldr r11, [r2, #8] 
     ldr r12, [r2, #12] 
-    str r4, [r0] 
-    str r4, [r9] 
-    ldr r4, [r2, #16] 
-    str r5, [r0, #4] 
-    str r5, [r9, #4] 
-    ldr r5, [r2, #20] 
-    str r6, [r0, #8] 
-    str r6, [r9, #8] 
-    ldr r6, [r2, #24] 
-    str r7, [r0, #12] 
-    str r7, [r9, #12] 
-    ldr r7, [r2, #28] 
-    str r8, [r0, #16] 
-    str r8, [r9, #16] 
-    ldr r8, [r1, #8] 
+    str r4,  [r0] 
+    str r4,  [r9] 
+    ldr r4,  [r2, #16] 
+    str r5,  [r0, #4] 
+    str r5,  [r9, #4] 
+    ldr r5,  [r2, #20] 
+    str r6,  [r0, #8] 
+    str r6,  [r9, #8] 
+    ldr r6,  [r2, #24] 
+    str r7,  [r0, #12] 
+    str r7,  [r9, #12] 
+    ldr r7,  [r2, #28] 
+    str r8,  [r0, #16] 
+    str r8,  [r9, #16] 
+    ldr r8,  [r1, #8] 
     str r10, [r0, #20] 
     str r10, [r9, #20] 
     ldr r10, [r1, #12] 
@@ -229,16 +160,16 @@ crypto_core_chacha20:
     str r12, [r0, #28] 
     str r12, [r9, #28] 
     ldr r12, [r1, #4] 
-    str r4, [r0, #32] 
-    str r4, [r9, #32] 
-    str r5, [r0, #36] 
-    str r5, [r9, #36] 
-    str r6, [r0, #40] 
-    str r6, [r9, #40] 
-    str r7, [r0, #44] 
-    str r7, [r9, #44] 
-    str r8, [r0, #48] 
-    str r8, [r9, #48] 
+    str r4,  [r0, #32] 
+    str r4,  [r9, #32] 
+    str r5,  [r0, #36] 
+    str r5,  [r9, #36] 
+    str r6,  [r0, #40] 
+    str r6,  [r9, #40] 
+    str r7,  [r0, #44] 
+    str r7,  [r9, #44] 
+    str r8,  [r0, #48] 
+    str r8,  [r9, #48] 
     str r10, [r0, #52] 
     str r10, [r9, #52] 
     str r11, [r0, #56] 
@@ -275,60 +206,60 @@ crypto_core_chacha20:
     ldr r11, [r1, #16]
     ldr r12, [r2, #16]
     // intermediate stores and loads
-    add r3, r3, r4
-    str r3, [r0]
-    ldr r3, [r1, #20]
-    ldr r4, [r2, #20]
-    add r5, r5, r6
-    str r5, [r0, #4]
-    ldr r5, [r1, #24]
-    ldr r6, [r2, #24]
-    add r7, r7, r8
-    str r7, [r0, #8]
-    ldr r7, [r1, #28]
-    ldr r8, [r2, #28]
-    add r9, r9, r10
-    str r9, [r0, #12]
-    ldr r9, [r1, #32]
+    add r3,  r3,  r4
+    str r3,  [r0]
+    ldr r3,  [r1, #20]
+    ldr r4,  [r2, #20]
+    add r5,  r5,  r6
+    str r5,  [r0, #4]
+    ldr r5,  [r1, #24]
+    ldr r6,  [r2, #24]
+    add r7,  r7,  r8
+    str r7,  [r0, #8]
+    ldr r7,  [r1, #28]
+    ldr r8,  [r2, #28]
+    add r9,  r9,  r10
+    str r9,  [r0, #12]
+    ldr r9,  [r1, #32]
     ldr r10, [r2, #32]
-    add r11, r11, r12
+    add r11, r11,  r12
     str r11, [r0, #16]
     ldr r11, [r1, #36]
     ldr r12, [r2, #36]
-    add r3, r3, r4
-    str r3, [r0, #20]
+    add r3,  r3,  r4
+    str r3,  [r0, #20]
     ldr r3,  [r1, #40]
     ldr r4,  [r2, #40]
-    add r5, r5, r6
-    str r5, [r0, #24]
-    ldr r5, [r1, #44]
-    ldr r6, [r2, #44]
-    add r7, r7, r8
-    str r7, [r0, #28]
-    ldr r7, [r1, #48]
-    ldr r8, [r2, #48]
-    add r9, r9, r10
-    str r9, [r0, #32]
-    ldr r9, [r1, #52]
+    add r5,  r5,  r6
+    str r5,  [r0, #24]
+    ldr r5,  [r1, #44]
+    ldr r6,  [r2, #44]
+    add r7,  r7,  r8
+    str r7,  [r0, #28]
+    ldr r7,  [r1, #48]
+    ldr r8,  [r2, #48]
+    add r9,  r9,  r10
+    str r9,  [r0, #32]
+    ldr r9,  [r1, #52]
     ldr r10, [r2, #52]
     add r11, r11, r12
     str r11, [r0, #36]
     ldr r11, [r1, #56]
     ldr r12, [r2, #56]
-    add r3, r3, r4
-    str r3, [r0, #40]
+    add r3,  r3,  r4
+    str r3,  [r0, #40]
     ldr r3,  [r1, #60]
     ldr r4,  [r2, #60]
-    add r5, r5, r6
-    str r5, [r0, #44]
-    add r7, r7, r8
-    str r7, [r0, #48]
-    add r9, r9, r10
-    str r9, [r0, #52]
+    add r5,  r5,  r6
+    str r5,  [r0, #44]
+    add r7,  r7,  r8
+    str r7,  [r0, #48]
+    add r9,  r9,  r10
+    str r9,  [r0, #52]
     add r11, r11, r12
     str r11, [r0, #56]
-    add r3, r3, r4
-    str r3, [r0, #60]
+    add r3,  r3,  r4
+    str r3,  [r0, #60]
 
     pop {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}
-    bx lr
+    bx  lr
