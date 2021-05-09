@@ -1,7 +1,7 @@
 .syntax unified
 
 .macro DOUBLE_FULLROUND
-    // Main optimization for fulr0ound is that we can
+    // Main optimization for fullround is that we can
     // a great deal of rotates with the barrel shifter
     // We also do as much intermediate
     // loads and stores to ensure the pipeline is filled.
@@ -12,10 +12,19 @@
     // We could do it with 16 loads and 16 stores
     // But we only have 13 registers.
     // So we have to load 4 values twice.
-    // It's possible to do ith with 15 loads and stores
+    // It's possible to do with with 15 loads and stores
     // since x15 is used twice in two subsequent
-    // quarterrounds. But it's to much work
-    // for now to rewrite 
+    // quarterrounds. But doing this means
+    // you store x12-x15 in the non-constant
+    // register. In the last 4 quarterrounds
+    // however x12-x15 are used as `d`. `d`
+    // cannot be conventiently modified with
+    // the barrel shifter so it always requires
+    // a ror instruction before being stored.
+    // This means we have to choose:
+    //    - Single store and load less.
+    //    - 4 less ror instructions.
+    // We have chosen to have 4 less ror instructions.
 
     ldr     r4,  [r0, #16]
     ldr     r12, [r0, #0]
