@@ -6,19 +6,19 @@
     // We also do as much intermediate
     // loads and stores to ensure the pipeline is filled.
     // We also much more efficiently use registers
-    // We only need to do 20 stores and 20 loads
+    // We only need to do 8 stores and 8 loads
     // For a single double full round.
     // With 17 useable registers
-    // We could do it with 16 loads and 16 stores
+    // We could do it with no loads and stores
     // But we only have 13 registers.
-    // So we have to load 4 values twice.
-    // It's possible to do with with 15 loads and stores
+    // So we have to load/store 4 values twice.
+    // It's possible to do with with 6 loads and stores
     // since x15 is used twice in two subsequent
     // quarterrounds. But doing this means
     // you store x12-x15 in the non-constant
     // register. In the last 4 quarterrounds
     // however x12-x15 are used as `d`. `d`
-    // cannot be conventiently modified with
+    // cannot be conveniently modified with
     // the barrel shifter so it always requires
     // a ror instruction before being stored.
     // This means we have to choose:
@@ -247,9 +247,11 @@ crypto_core_chacha20:
     str r12, [r9, #60]
 
     // Run 10x double fullrounds
-    // We do not have to keep setting
-    // r0 to r3 because double_fullround
-    // does not set these registers
+    // r0 is allready the correct
+    // value. We also don't have
+    // to restore any other registers
+    // since in the next part we don't
+    // use them anyway.
     bl ten_double_fullround
 
     // This is adding every element in j to x.
