@@ -3,7 +3,7 @@ with ((import (fetchTarball {
   url = "https://github.com/nixos/nixpkgs/archive/a73020b2a150322c9832b50baeb0296ba3b13dd7.tar.gz";
   sha256 = "1s0ckc2qscrflr7bssd0s32zddp48dg5jk22w1dip2q2q7ks6cj0";
 }) {}));
-let extensions = (with pkgs.vscode-extensions; [
+  let extensions = (with pkgs.vscode-extensions; [
       ms-vsliveshare.vsliveshare
       ms-vscode.cpptools
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [{
@@ -18,9 +18,13 @@ let extensions = (with pkgs.vscode-extensions; [
       sha256 = "1h55jahz8rpwyx14r3rqx9lsb00vzcj42pr95n4hhyipkbr3sc9z";
     }]);
 
+  vscode-with-extensions = pkgs.vscode-with-extensions.override {
+    vscodeExtensions = extensions;
+  };
+
 in pkgs.mkShell {
   buildInputs = [
-    extensions
+    vscode-with-extensions
     # Software
     gcc-arm-embedded
     stlink
