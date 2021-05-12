@@ -16,8 +16,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 -- describe the interface of the module: a testbench does not have any inputs or outputs
 entity tb_modmultn is
     generic(
-        width: integer := 8;
-        log2width: integer := 3);
+        width: integer := 16;
+        log2width: integer := 4);
 end tb_modmultn;
 
 architecture behavioral of tb_modmultn is
@@ -96,11 +96,29 @@ begin
 
     wait for clk_period;
 
-    a_i <= "10101101";
-    b_i <= "10011001";
-    p_i <= "11111101";
+    a_i <= "00001000";
+    b_i <= "00010001";
+    p_i <= "00001001";
     start_i <= '1';
-    product_true <= "10011101";
+    product_true <= "01110001";
+    error_comp <= '0';
+    wait for clk_period;
+        
+    start_i <= '0';
+    
+    wait until done_i = '1';
+    
+    if(product_true /= product_i) then
+        error_comp <= '1';
+    else
+        error_comp <= '0';
+    end if;
+
+    a_i <= "0000000010101101";
+    b_i <= "0000000010011001";
+    p_i <= "0000000011111101";
+    start_i <= '1';
+    product_true <= "0000000010011101";
     error_comp <= '0';
     wait for clk_period;
 
@@ -116,11 +134,11 @@ begin
     
     wait for 3*clk_period/2;
 
-    a_i <= "01111011";
-    b_i <= "00101000";
-    p_i <= "11111101";
+    a_i <= "0000000001111011";
+    b_i <= "0000000000101000";
+    p_i <= "0000000011111101";
     start_i <= '1';
-    product_true <= "01110001";
+    product_true <= "0000000001110001";
     error_comp <= '0';
     wait for clk_period;
         
