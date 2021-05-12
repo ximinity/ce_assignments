@@ -1,0 +1,1038 @@
+
+obj/chacha20s.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <ten_double_fullround>:
+   0:	b500      	push	{lr}
+   2:	6904      	ldr	r4, [r0, #16]
+   4:	6945      	ldr	r5, [r0, #20]
+   6:	6986      	ldr	r6, [r0, #24]
+   8:	69c7      	ldr	r7, [r0, #28]
+   a:	f8d0 8020 	ldr.w	r8, [r0, #32]
+   e:	f8d0 9024 	ldr.w	r9, [r0, #36]	; 0x24
+  12:	f8d0 a028 	ldr.w	sl, [r0, #40]	; 0x28
+  16:	f8d0 b02c 	ldr.w	fp, [r0, #44]	; 0x2c
+  1a:	f8d0 e030 	ldr.w	lr, [r0, #48]	; 0x30
+  1e:	6b41      	ldr	r1, [r0, #52]	; 0x34
+  20:	6b82      	ldr	r2, [r0, #56]	; 0x38
+  22:	6bc3      	ldr	r3, [r0, #60]	; 0x3c
+  24:	f8d0 c000 	ldr.w	ip, [r0]
+  28:	44a4      	add	ip, r4
+  2a:	ea8e 0e0c 	eor.w	lr, lr, ip
+  2e:	eb08 483e 	add.w	r8, r8, lr, ror #16
+  32:	ea84 0408 	eor.w	r4, r4, r8
+  36:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+  3a:	f8c0 c000 	str.w	ip, [r0]
+  3e:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+  42:	eb08 683e 	add.w	r8, r8, lr, ror #24
+  46:	f8d0 c004 	ldr.w	ip, [r0, #4]
+  4a:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+  4e:	44ac      	add	ip, r5
+  50:	ea81 010c 	eor.w	r1, r1, ip
+  54:	eb09 4931 	add.w	r9, r9, r1, ror #16
+  58:	ea85 0509 	eor.w	r5, r5, r9
+  5c:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+  60:	f8c0 c004 	str.w	ip, [r0, #4]
+  64:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+  68:	eb09 6931 	add.w	r9, r9, r1, ror #24
+  6c:	f8d0 c008 	ldr.w	ip, [r0, #8]
+  70:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+  74:	44b4      	add	ip, r6
+  76:	ea82 020c 	eor.w	r2, r2, ip
+  7a:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+  7e:	ea86 060a 	eor.w	r6, r6, sl
+  82:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+  86:	f8c0 c008 	str.w	ip, [r0, #8]
+  8a:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+  8e:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+  92:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+  96:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+  9a:	44bc      	add	ip, r7
+  9c:	ea83 030c 	eor.w	r3, r3, ip
+  a0:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+  a4:	ea87 070b 	eor.w	r7, r7, fp
+  a8:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+  ac:	f8c0 c00c 	str.w	ip, [r0, #12]
+  b0:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+  b4:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+  b8:	f8d0 c000 	ldr.w	ip, [r0]
+  bc:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+  c0:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+  c4:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+  c8:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+  cc:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+  d0:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+  d4:	f8c0 c000 	str.w	ip, [r0]
+  d8:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+  dc:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+  e0:	ea4f 6333 	mov.w	r3, r3, ror #24
+  e4:	f8d0 c004 	ldr.w	ip, [r0, #4]
+  e8:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+  ec:	ea4f 6575 	mov.w	r5, r5, ror #25
+  f0:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+  f4:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+  f8:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+  fc:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ 100:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 104:	f8c0 c004 	str.w	ip, [r0, #4]
+ 108:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 10c:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ 110:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ 114:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 118:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ 11c:	ea4f 6676 	mov.w	r6, r6, ror #25
+ 120:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ 124:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ 128:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ 12c:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ 130:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 134:	f8c0 c008 	str.w	ip, [r0, #8]
+ 138:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 13c:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ 140:	ea4f 6131 	mov.w	r1, r1, ror #24
+ 144:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 148:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ 14c:	ea4f 6777 	mov.w	r7, r7, ror #25
+ 150:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ 154:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ 158:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ 15c:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ 160:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 164:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 168:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 16c:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ 170:	ea4f 6232 	mov.w	r2, r2, ror #24
+ 174:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ 178:	ea4f 6474 	mov.w	r4, r4, ror #25
+ 17c:	f8d0 c000 	ldr.w	ip, [r0]
+ 180:	44a4      	add	ip, r4
+ 182:	ea8e 0e0c 	eor.w	lr, lr, ip
+ 186:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ 18a:	ea84 0408 	eor.w	r4, r4, r8
+ 18e:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 192:	f8c0 c000 	str.w	ip, [r0]
+ 196:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 19a:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ 19e:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 1a2:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ 1a6:	44ac      	add	ip, r5
+ 1a8:	ea81 010c 	eor.w	r1, r1, ip
+ 1ac:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ 1b0:	ea85 0509 	eor.w	r5, r5, r9
+ 1b4:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 1b8:	f8c0 c004 	str.w	ip, [r0, #4]
+ 1bc:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 1c0:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ 1c4:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 1c8:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ 1cc:	44b4      	add	ip, r6
+ 1ce:	ea82 020c 	eor.w	r2, r2, ip
+ 1d2:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ 1d6:	ea86 060a 	eor.w	r6, r6, sl
+ 1da:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 1de:	f8c0 c008 	str.w	ip, [r0, #8]
+ 1e2:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 1e6:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ 1ea:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 1ee:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ 1f2:	44bc      	add	ip, r7
+ 1f4:	ea83 030c 	eor.w	r3, r3, ip
+ 1f8:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ 1fc:	ea87 070b 	eor.w	r7, r7, fp
+ 200:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 204:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 208:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 20c:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ 210:	f8d0 c000 	ldr.w	ip, [r0]
+ 214:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ 218:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ 21c:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ 220:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ 224:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ 228:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 22c:	f8c0 c000 	str.w	ip, [r0]
+ 230:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 234:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ 238:	ea4f 6333 	mov.w	r3, r3, ror #24
+ 23c:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 240:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ 244:	ea4f 6575 	mov.w	r5, r5, ror #25
+ 248:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ 24c:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ 250:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ 254:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ 258:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 25c:	f8c0 c004 	str.w	ip, [r0, #4]
+ 260:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 264:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ 268:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ 26c:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 270:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ 274:	ea4f 6676 	mov.w	r6, r6, ror #25
+ 278:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ 27c:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ 280:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ 284:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ 288:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 28c:	f8c0 c008 	str.w	ip, [r0, #8]
+ 290:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 294:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ 298:	ea4f 6131 	mov.w	r1, r1, ror #24
+ 29c:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 2a0:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ 2a4:	ea4f 6777 	mov.w	r7, r7, ror #25
+ 2a8:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ 2ac:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ 2b0:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ 2b4:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ 2b8:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 2bc:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 2c0:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 2c4:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ 2c8:	ea4f 6232 	mov.w	r2, r2, ror #24
+ 2cc:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ 2d0:	ea4f 6474 	mov.w	r4, r4, ror #25
+ 2d4:	f8d0 c000 	ldr.w	ip, [r0]
+ 2d8:	44a4      	add	ip, r4
+ 2da:	ea8e 0e0c 	eor.w	lr, lr, ip
+ 2de:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ 2e2:	ea84 0408 	eor.w	r4, r4, r8
+ 2e6:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 2ea:	f8c0 c000 	str.w	ip, [r0]
+ 2ee:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 2f2:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ 2f6:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 2fa:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ 2fe:	44ac      	add	ip, r5
+ 300:	ea81 010c 	eor.w	r1, r1, ip
+ 304:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ 308:	ea85 0509 	eor.w	r5, r5, r9
+ 30c:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 310:	f8c0 c004 	str.w	ip, [r0, #4]
+ 314:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 318:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ 31c:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 320:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ 324:	44b4      	add	ip, r6
+ 326:	ea82 020c 	eor.w	r2, r2, ip
+ 32a:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ 32e:	ea86 060a 	eor.w	r6, r6, sl
+ 332:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 336:	f8c0 c008 	str.w	ip, [r0, #8]
+ 33a:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 33e:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ 342:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 346:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ 34a:	44bc      	add	ip, r7
+ 34c:	ea83 030c 	eor.w	r3, r3, ip
+ 350:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ 354:	ea87 070b 	eor.w	r7, r7, fp
+ 358:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 35c:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 360:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 364:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ 368:	f8d0 c000 	ldr.w	ip, [r0]
+ 36c:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ 370:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ 374:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ 378:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ 37c:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ 380:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 384:	f8c0 c000 	str.w	ip, [r0]
+ 388:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 38c:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ 390:	ea4f 6333 	mov.w	r3, r3, ror #24
+ 394:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 398:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ 39c:	ea4f 6575 	mov.w	r5, r5, ror #25
+ 3a0:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ 3a4:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ 3a8:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ 3ac:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ 3b0:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 3b4:	f8c0 c004 	str.w	ip, [r0, #4]
+ 3b8:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 3bc:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ 3c0:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ 3c4:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 3c8:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ 3cc:	ea4f 6676 	mov.w	r6, r6, ror #25
+ 3d0:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ 3d4:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ 3d8:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ 3dc:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ 3e0:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 3e4:	f8c0 c008 	str.w	ip, [r0, #8]
+ 3e8:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 3ec:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ 3f0:	ea4f 6131 	mov.w	r1, r1, ror #24
+ 3f4:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 3f8:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ 3fc:	ea4f 6777 	mov.w	r7, r7, ror #25
+ 400:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ 404:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ 408:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ 40c:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ 410:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 414:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 418:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 41c:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ 420:	ea4f 6232 	mov.w	r2, r2, ror #24
+ 424:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ 428:	ea4f 6474 	mov.w	r4, r4, ror #25
+ 42c:	f8d0 c000 	ldr.w	ip, [r0]
+ 430:	44a4      	add	ip, r4
+ 432:	ea8e 0e0c 	eor.w	lr, lr, ip
+ 436:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ 43a:	ea84 0408 	eor.w	r4, r4, r8
+ 43e:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 442:	f8c0 c000 	str.w	ip, [r0]
+ 446:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 44a:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ 44e:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 452:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ 456:	44ac      	add	ip, r5
+ 458:	ea81 010c 	eor.w	r1, r1, ip
+ 45c:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ 460:	ea85 0509 	eor.w	r5, r5, r9
+ 464:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 468:	f8c0 c004 	str.w	ip, [r0, #4]
+ 46c:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 470:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ 474:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 478:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ 47c:	44b4      	add	ip, r6
+ 47e:	ea82 020c 	eor.w	r2, r2, ip
+ 482:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ 486:	ea86 060a 	eor.w	r6, r6, sl
+ 48a:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 48e:	f8c0 c008 	str.w	ip, [r0, #8]
+ 492:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 496:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ 49a:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 49e:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ 4a2:	44bc      	add	ip, r7
+ 4a4:	ea83 030c 	eor.w	r3, r3, ip
+ 4a8:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ 4ac:	ea87 070b 	eor.w	r7, r7, fp
+ 4b0:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 4b4:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 4b8:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 4bc:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ 4c0:	f8d0 c000 	ldr.w	ip, [r0]
+ 4c4:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ 4c8:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ 4cc:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ 4d0:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ 4d4:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ 4d8:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 4dc:	f8c0 c000 	str.w	ip, [r0]
+ 4e0:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 4e4:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ 4e8:	ea4f 6333 	mov.w	r3, r3, ror #24
+ 4ec:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 4f0:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ 4f4:	ea4f 6575 	mov.w	r5, r5, ror #25
+ 4f8:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ 4fc:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ 500:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ 504:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ 508:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 50c:	f8c0 c004 	str.w	ip, [r0, #4]
+ 510:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 514:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ 518:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ 51c:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 520:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ 524:	ea4f 6676 	mov.w	r6, r6, ror #25
+ 528:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ 52c:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ 530:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ 534:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ 538:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 53c:	f8c0 c008 	str.w	ip, [r0, #8]
+ 540:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 544:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ 548:	ea4f 6131 	mov.w	r1, r1, ror #24
+ 54c:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 550:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ 554:	ea4f 6777 	mov.w	r7, r7, ror #25
+ 558:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ 55c:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ 560:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ 564:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ 568:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 56c:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 570:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 574:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ 578:	ea4f 6232 	mov.w	r2, r2, ror #24
+ 57c:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ 580:	ea4f 6474 	mov.w	r4, r4, ror #25
+ 584:	f8d0 c000 	ldr.w	ip, [r0]
+ 588:	44a4      	add	ip, r4
+ 58a:	ea8e 0e0c 	eor.w	lr, lr, ip
+ 58e:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ 592:	ea84 0408 	eor.w	r4, r4, r8
+ 596:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 59a:	f8c0 c000 	str.w	ip, [r0]
+ 59e:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 5a2:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ 5a6:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 5aa:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ 5ae:	44ac      	add	ip, r5
+ 5b0:	ea81 010c 	eor.w	r1, r1, ip
+ 5b4:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ 5b8:	ea85 0509 	eor.w	r5, r5, r9
+ 5bc:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 5c0:	f8c0 c004 	str.w	ip, [r0, #4]
+ 5c4:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 5c8:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ 5cc:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 5d0:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ 5d4:	44b4      	add	ip, r6
+ 5d6:	ea82 020c 	eor.w	r2, r2, ip
+ 5da:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ 5de:	ea86 060a 	eor.w	r6, r6, sl
+ 5e2:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 5e6:	f8c0 c008 	str.w	ip, [r0, #8]
+ 5ea:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 5ee:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ 5f2:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 5f6:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ 5fa:	44bc      	add	ip, r7
+ 5fc:	ea83 030c 	eor.w	r3, r3, ip
+ 600:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ 604:	ea87 070b 	eor.w	r7, r7, fp
+ 608:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 60c:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 610:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 614:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ 618:	f8d0 c000 	ldr.w	ip, [r0]
+ 61c:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ 620:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ 624:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ 628:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ 62c:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ 630:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 634:	f8c0 c000 	str.w	ip, [r0]
+ 638:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 63c:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ 640:	ea4f 6333 	mov.w	r3, r3, ror #24
+ 644:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 648:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ 64c:	ea4f 6575 	mov.w	r5, r5, ror #25
+ 650:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ 654:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ 658:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ 65c:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ 660:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 664:	f8c0 c004 	str.w	ip, [r0, #4]
+ 668:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 66c:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ 670:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ 674:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 678:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ 67c:	ea4f 6676 	mov.w	r6, r6, ror #25
+ 680:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ 684:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ 688:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ 68c:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ 690:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 694:	f8c0 c008 	str.w	ip, [r0, #8]
+ 698:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 69c:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ 6a0:	ea4f 6131 	mov.w	r1, r1, ror #24
+ 6a4:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 6a8:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ 6ac:	ea4f 6777 	mov.w	r7, r7, ror #25
+ 6b0:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ 6b4:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ 6b8:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ 6bc:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ 6c0:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 6c4:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 6c8:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 6cc:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ 6d0:	ea4f 6232 	mov.w	r2, r2, ror #24
+ 6d4:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ 6d8:	ea4f 6474 	mov.w	r4, r4, ror #25
+ 6dc:	f8d0 c000 	ldr.w	ip, [r0]
+ 6e0:	44a4      	add	ip, r4
+ 6e2:	ea8e 0e0c 	eor.w	lr, lr, ip
+ 6e6:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ 6ea:	ea84 0408 	eor.w	r4, r4, r8
+ 6ee:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 6f2:	f8c0 c000 	str.w	ip, [r0]
+ 6f6:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 6fa:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ 6fe:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 702:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ 706:	44ac      	add	ip, r5
+ 708:	ea81 010c 	eor.w	r1, r1, ip
+ 70c:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ 710:	ea85 0509 	eor.w	r5, r5, r9
+ 714:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 718:	f8c0 c004 	str.w	ip, [r0, #4]
+ 71c:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 720:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ 724:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 728:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ 72c:	44b4      	add	ip, r6
+ 72e:	ea82 020c 	eor.w	r2, r2, ip
+ 732:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ 736:	ea86 060a 	eor.w	r6, r6, sl
+ 73a:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 73e:	f8c0 c008 	str.w	ip, [r0, #8]
+ 742:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 746:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ 74a:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 74e:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ 752:	44bc      	add	ip, r7
+ 754:	ea83 030c 	eor.w	r3, r3, ip
+ 758:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ 75c:	ea87 070b 	eor.w	r7, r7, fp
+ 760:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 764:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 768:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 76c:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ 770:	f8d0 c000 	ldr.w	ip, [r0]
+ 774:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ 778:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ 77c:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ 780:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ 784:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ 788:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 78c:	f8c0 c000 	str.w	ip, [r0]
+ 790:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 794:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ 798:	ea4f 6333 	mov.w	r3, r3, ror #24
+ 79c:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 7a0:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ 7a4:	ea4f 6575 	mov.w	r5, r5, ror #25
+ 7a8:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ 7ac:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ 7b0:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ 7b4:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ 7b8:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 7bc:	f8c0 c004 	str.w	ip, [r0, #4]
+ 7c0:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 7c4:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ 7c8:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ 7cc:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 7d0:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ 7d4:	ea4f 6676 	mov.w	r6, r6, ror #25
+ 7d8:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ 7dc:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ 7e0:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ 7e4:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ 7e8:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 7ec:	f8c0 c008 	str.w	ip, [r0, #8]
+ 7f0:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 7f4:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ 7f8:	ea4f 6131 	mov.w	r1, r1, ror #24
+ 7fc:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 800:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ 804:	ea4f 6777 	mov.w	r7, r7, ror #25
+ 808:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ 80c:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ 810:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ 814:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ 818:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 81c:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 820:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 824:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ 828:	ea4f 6232 	mov.w	r2, r2, ror #24
+ 82c:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ 830:	ea4f 6474 	mov.w	r4, r4, ror #25
+ 834:	f8d0 c000 	ldr.w	ip, [r0]
+ 838:	44a4      	add	ip, r4
+ 83a:	ea8e 0e0c 	eor.w	lr, lr, ip
+ 83e:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ 842:	ea84 0408 	eor.w	r4, r4, r8
+ 846:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 84a:	f8c0 c000 	str.w	ip, [r0]
+ 84e:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 852:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ 856:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 85a:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ 85e:	44ac      	add	ip, r5
+ 860:	ea81 010c 	eor.w	r1, r1, ip
+ 864:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ 868:	ea85 0509 	eor.w	r5, r5, r9
+ 86c:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 870:	f8c0 c004 	str.w	ip, [r0, #4]
+ 874:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 878:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ 87c:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 880:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ 884:	44b4      	add	ip, r6
+ 886:	ea82 020c 	eor.w	r2, r2, ip
+ 88a:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ 88e:	ea86 060a 	eor.w	r6, r6, sl
+ 892:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 896:	f8c0 c008 	str.w	ip, [r0, #8]
+ 89a:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 89e:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ 8a2:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 8a6:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ 8aa:	44bc      	add	ip, r7
+ 8ac:	ea83 030c 	eor.w	r3, r3, ip
+ 8b0:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ 8b4:	ea87 070b 	eor.w	r7, r7, fp
+ 8b8:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 8bc:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 8c0:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 8c4:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ 8c8:	f8d0 c000 	ldr.w	ip, [r0]
+ 8cc:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ 8d0:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ 8d4:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ 8d8:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ 8dc:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ 8e0:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 8e4:	f8c0 c000 	str.w	ip, [r0]
+ 8e8:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ 8ec:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ 8f0:	ea4f 6333 	mov.w	r3, r3, ror #24
+ 8f4:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 8f8:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ 8fc:	ea4f 6575 	mov.w	r5, r5, ror #25
+ 900:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ 904:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ 908:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ 90c:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ 910:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 914:	f8c0 c004 	str.w	ip, [r0, #4]
+ 918:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 91c:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ 920:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ 924:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 928:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ 92c:	ea4f 6676 	mov.w	r6, r6, ror #25
+ 930:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ 934:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ 938:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ 93c:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ 940:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ 944:	f8c0 c008 	str.w	ip, [r0, #8]
+ 948:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 94c:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ 950:	ea4f 6131 	mov.w	r1, r1, ror #24
+ 954:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 958:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ 95c:	ea4f 6777 	mov.w	r7, r7, ror #25
+ 960:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ 964:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ 968:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ 96c:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ 970:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 974:	f8c0 c00c 	str.w	ip, [r0, #12]
+ 978:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 97c:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ 980:	ea4f 6232 	mov.w	r2, r2, ror #24
+ 984:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ 988:	ea4f 6474 	mov.w	r4, r4, ror #25
+ 98c:	f8d0 c000 	ldr.w	ip, [r0]
+ 990:	44a4      	add	ip, r4
+ 992:	ea8e 0e0c 	eor.w	lr, lr, ip
+ 996:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ 99a:	ea84 0408 	eor.w	r4, r4, r8
+ 99e:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ 9a2:	f8c0 c000 	str.w	ip, [r0]
+ 9a6:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ 9aa:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ 9ae:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ 9b2:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ 9b6:	44ac      	add	ip, r5
+ 9b8:	ea81 010c 	eor.w	r1, r1, ip
+ 9bc:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ 9c0:	ea85 0509 	eor.w	r5, r5, r9
+ 9c4:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ 9c8:	f8c0 c004 	str.w	ip, [r0, #4]
+ 9cc:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ 9d0:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ 9d4:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ 9d8:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ 9dc:	44b4      	add	ip, r6
+ 9de:	ea82 020c 	eor.w	r2, r2, ip
+ 9e2:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ 9e6:	ea86 060a 	eor.w	r6, r6, sl
+ 9ea:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ 9ee:	f8c0 c008 	str.w	ip, [r0, #8]
+ 9f2:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ 9f6:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ 9fa:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ 9fe:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ a02:	44bc      	add	ip, r7
+ a04:	ea83 030c 	eor.w	r3, r3, ip
+ a08:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ a0c:	ea87 070b 	eor.w	r7, r7, fp
+ a10:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ a14:	f8c0 c00c 	str.w	ip, [r0, #12]
+ a18:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ a1c:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ a20:	f8d0 c000 	ldr.w	ip, [r0]
+ a24:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ a28:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ a2c:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ a30:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ a34:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ a38:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ a3c:	f8c0 c000 	str.w	ip, [r0]
+ a40:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ a44:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ a48:	ea4f 6333 	mov.w	r3, r3, ror #24
+ a4c:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ a50:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ a54:	ea4f 6575 	mov.w	r5, r5, ror #25
+ a58:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ a5c:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ a60:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ a64:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ a68:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ a6c:	f8c0 c004 	str.w	ip, [r0, #4]
+ a70:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ a74:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ a78:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ a7c:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ a80:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ a84:	ea4f 6676 	mov.w	r6, r6, ror #25
+ a88:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ a8c:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ a90:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ a94:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ a98:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ a9c:	f8c0 c008 	str.w	ip, [r0, #8]
+ aa0:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ aa4:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ aa8:	ea4f 6131 	mov.w	r1, r1, ror #24
+ aac:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ ab0:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ ab4:	ea4f 6777 	mov.w	r7, r7, ror #25
+ ab8:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ abc:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ ac0:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ ac4:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ ac8:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ acc:	f8c0 c00c 	str.w	ip, [r0, #12]
+ ad0:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ ad4:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ ad8:	ea4f 6232 	mov.w	r2, r2, ror #24
+ adc:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ ae0:	ea4f 6474 	mov.w	r4, r4, ror #25
+ ae4:	f8d0 c000 	ldr.w	ip, [r0]
+ ae8:	44a4      	add	ip, r4
+ aea:	ea8e 0e0c 	eor.w	lr, lr, ip
+ aee:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ af2:	ea84 0408 	eor.w	r4, r4, r8
+ af6:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ afa:	f8c0 c000 	str.w	ip, [r0]
+ afe:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ b02:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ b06:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ b0a:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ b0e:	44ac      	add	ip, r5
+ b10:	ea81 010c 	eor.w	r1, r1, ip
+ b14:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ b18:	ea85 0509 	eor.w	r5, r5, r9
+ b1c:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ b20:	f8c0 c004 	str.w	ip, [r0, #4]
+ b24:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ b28:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ b2c:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ b30:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ b34:	44b4      	add	ip, r6
+ b36:	ea82 020c 	eor.w	r2, r2, ip
+ b3a:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ b3e:	ea86 060a 	eor.w	r6, r6, sl
+ b42:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ b46:	f8c0 c008 	str.w	ip, [r0, #8]
+ b4a:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ b4e:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ b52:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ b56:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ b5a:	44bc      	add	ip, r7
+ b5c:	ea83 030c 	eor.w	r3, r3, ip
+ b60:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ b64:	ea87 070b 	eor.w	r7, r7, fp
+ b68:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ b6c:	f8c0 c00c 	str.w	ip, [r0, #12]
+ b70:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ b74:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ b78:	f8d0 c000 	ldr.w	ip, [r0]
+ b7c:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ b80:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ b84:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ b88:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ b8c:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ b90:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ b94:	f8c0 c000 	str.w	ip, [r0]
+ b98:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ b9c:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ ba0:	ea4f 6333 	mov.w	r3, r3, ror #24
+ ba4:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ ba8:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ bac:	ea4f 6575 	mov.w	r5, r5, ror #25
+ bb0:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ bb4:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ bb8:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ bbc:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ bc0:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ bc4:	f8c0 c004 	str.w	ip, [r0, #4]
+ bc8:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ bcc:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ bd0:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ bd4:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ bd8:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ bdc:	ea4f 6676 	mov.w	r6, r6, ror #25
+ be0:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ be4:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ be8:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ bec:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ bf0:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ bf4:	f8c0 c008 	str.w	ip, [r0, #8]
+ bf8:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ bfc:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ c00:	ea4f 6131 	mov.w	r1, r1, ror #24
+ c04:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ c08:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ c0c:	ea4f 6777 	mov.w	r7, r7, ror #25
+ c10:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ c14:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ c18:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ c1c:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ c20:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ c24:	f8c0 c00c 	str.w	ip, [r0, #12]
+ c28:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ c2c:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ c30:	ea4f 6232 	mov.w	r2, r2, ror #24
+ c34:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ c38:	ea4f 6474 	mov.w	r4, r4, ror #25
+ c3c:	f8d0 c000 	ldr.w	ip, [r0]
+ c40:	44a4      	add	ip, r4
+ c42:	ea8e 0e0c 	eor.w	lr, lr, ip
+ c46:	eb08 483e 	add.w	r8, r8, lr, ror #16
+ c4a:	ea84 0408 	eor.w	r4, r4, r8
+ c4e:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ c52:	f8c0 c000 	str.w	ip, [r0]
+ c56:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ c5a:	eb08 683e 	add.w	r8, r8, lr, ror #24
+ c5e:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ c62:	ea88 5434 	eor.w	r4, r8, r4, ror #20
+ c66:	44ac      	add	ip, r5
+ c68:	ea81 010c 	eor.w	r1, r1, ip
+ c6c:	eb09 4931 	add.w	r9, r9, r1, ror #16
+ c70:	ea85 0509 	eor.w	r5, r5, r9
+ c74:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ c78:	f8c0 c004 	str.w	ip, [r0, #4]
+ c7c:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ c80:	eb09 6931 	add.w	r9, r9, r1, ror #24
+ c84:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ c88:	ea89 5535 	eor.w	r5, r9, r5, ror #20
+ c8c:	44b4      	add	ip, r6
+ c8e:	ea82 020c 	eor.w	r2, r2, ip
+ c92:	eb0a 4a32 	add.w	sl, sl, r2, ror #16
+ c96:	ea86 060a 	eor.w	r6, r6, sl
+ c9a:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ c9e:	f8c0 c008 	str.w	ip, [r0, #8]
+ ca2:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ ca6:	eb0a 6a32 	add.w	sl, sl, r2, ror #24
+ caa:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ cae:	ea8a 5636 	eor.w	r6, sl, r6, ror #20
+ cb2:	44bc      	add	ip, r7
+ cb4:	ea83 030c 	eor.w	r3, r3, ip
+ cb8:	eb0b 4b33 	add.w	fp, fp, r3, ror #16
+ cbc:	ea87 070b 	eor.w	r7, r7, fp
+ cc0:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ cc4:	f8c0 c00c 	str.w	ip, [r0, #12]
+ cc8:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ ccc:	eb0b 6b33 	add.w	fp, fp, r3, ror #24
+ cd0:	f8d0 c000 	ldr.w	ip, [r0]
+ cd4:	ea8b 5737 	eor.w	r7, fp, r7, ror #20
+ cd8:	eb0c 6c75 	add.w	ip, ip, r5, ror #25
+ cdc:	ea8c 6333 	eor.w	r3, ip, r3, ror #24
+ ce0:	eb0a 4a33 	add.w	sl, sl, r3, ror #16
+ ce4:	ea8a 6575 	eor.w	r5, sl, r5, ror #25
+ ce8:	eb0c 5c35 	add.w	ip, ip, r5, ror #20
+ cec:	f8c0 c000 	str.w	ip, [r0]
+ cf0:	ea8c 4333 	eor.w	r3, ip, r3, ror #16
+ cf4:	eb0a 6a33 	add.w	sl, sl, r3, ror #24
+ cf8:	ea4f 6333 	mov.w	r3, r3, ror #24
+ cfc:	f8d0 c004 	ldr.w	ip, [r0, #4]
+ d00:	ea8a 5535 	eor.w	r5, sl, r5, ror #20
+ d04:	ea4f 6575 	mov.w	r5, r5, ror #25
+ d08:	eb0c 6c76 	add.w	ip, ip, r6, ror #25
+ d0c:	ea8c 6e3e 	eor.w	lr, ip, lr, ror #24
+ d10:	eb0b 4b3e 	add.w	fp, fp, lr, ror #16
+ d14:	ea8b 6676 	eor.w	r6, fp, r6, ror #25
+ d18:	eb0c 5c36 	add.w	ip, ip, r6, ror #20
+ d1c:	f8c0 c004 	str.w	ip, [r0, #4]
+ d20:	ea8c 4e3e 	eor.w	lr, ip, lr, ror #16
+ d24:	eb0b 6b3e 	add.w	fp, fp, lr, ror #24
+ d28:	ea4f 6e3e 	mov.w	lr, lr, ror #24
+ d2c:	f8d0 c008 	ldr.w	ip, [r0, #8]
+ d30:	ea8b 5636 	eor.w	r6, fp, r6, ror #20
+ d34:	ea4f 6676 	mov.w	r6, r6, ror #25
+ d38:	eb0c 6c77 	add.w	ip, ip, r7, ror #25
+ d3c:	ea8c 6131 	eor.w	r1, ip, r1, ror #24
+ d40:	eb08 4831 	add.w	r8, r8, r1, ror #16
+ d44:	ea88 6777 	eor.w	r7, r8, r7, ror #25
+ d48:	eb0c 5c37 	add.w	ip, ip, r7, ror #20
+ d4c:	f8c0 c008 	str.w	ip, [r0, #8]
+ d50:	ea8c 4131 	eor.w	r1, ip, r1, ror #16
+ d54:	eb08 6831 	add.w	r8, r8, r1, ror #24
+ d58:	ea4f 6131 	mov.w	r1, r1, ror #24
+ d5c:	f8d0 c00c 	ldr.w	ip, [r0, #12]
+ d60:	ea88 5737 	eor.w	r7, r8, r7, ror #20
+ d64:	ea4f 6777 	mov.w	r7, r7, ror #25
+ d68:	eb0c 6c74 	add.w	ip, ip, r4, ror #25
+ d6c:	ea8c 6232 	eor.w	r2, ip, r2, ror #24
+ d70:	eb09 4932 	add.w	r9, r9, r2, ror #16
+ d74:	ea89 6474 	eor.w	r4, r9, r4, ror #25
+ d78:	eb0c 5c34 	add.w	ip, ip, r4, ror #20
+ d7c:	f8c0 c00c 	str.w	ip, [r0, #12]
+ d80:	ea8c 4232 	eor.w	r2, ip, r2, ror #16
+ d84:	eb09 6932 	add.w	r9, r9, r2, ror #24
+ d88:	ea4f 6232 	mov.w	r2, r2, ror #24
+ d8c:	ea89 5434 	eor.w	r4, r9, r4, ror #20
+ d90:	ea4f 6474 	mov.w	r4, r4, ror #25
+ d94:	6104      	str	r4, [r0, #16]
+ d96:	6145      	str	r5, [r0, #20]
+ d98:	6186      	str	r6, [r0, #24]
+ d9a:	61c7      	str	r7, [r0, #28]
+ d9c:	f8c0 8020 	str.w	r8, [r0, #32]
+ da0:	f8c0 9024 	str.w	r9, [r0, #36]	; 0x24
+ da4:	f8c0 a028 	str.w	sl, [r0, #40]	; 0x28
+ da8:	f8c0 b02c 	str.w	fp, [r0, #44]	; 0x2c
+ dac:	f8c0 e030 	str.w	lr, [r0, #48]	; 0x30
+ db0:	6341      	str	r1, [r0, #52]	; 0x34
+ db2:	6382      	str	r2, [r0, #56]	; 0x38
+ db4:	63c3      	str	r3, [r0, #60]	; 0x3c
+ db6:	f85d eb04 	ldr.w	lr, [sp], #4
+ dba:	4770      	bx	lr
+
+00000dbc <crypto_core_chacha20>:
+ dbc:	e92d 5ff1 	stmdb	sp!, {r0, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+ dc0:	4857      	ldr	r0, [pc, #348]	; (f20 <crypto_core_chacha20+0x164>)
+ dc2:	f8df 9160 	ldr.w	r9, [pc, #352]	; f24 <crypto_core_chacha20+0x168>
+ dc6:	681c      	ldr	r4, [r3, #0]
+ dc8:	685d      	ldr	r5, [r3, #4]
+ dca:	689e      	ldr	r6, [r3, #8]
+ dcc:	68df      	ldr	r7, [r3, #12]
+ dce:	f8d2 8000 	ldr.w	r8, [r2]
+ dd2:	f8d2 a004 	ldr.w	sl, [r2, #4]
+ dd6:	f8d2 b008 	ldr.w	fp, [r2, #8]
+ dda:	f8d2 c00c 	ldr.w	ip, [r2, #12]
+ dde:	6004      	str	r4, [r0, #0]
+ de0:	f8c9 4000 	str.w	r4, [r9]
+ de4:	6914      	ldr	r4, [r2, #16]
+ de6:	6045      	str	r5, [r0, #4]
+ de8:	f8c9 5004 	str.w	r5, [r9, #4]
+ dec:	6955      	ldr	r5, [r2, #20]
+ dee:	6086      	str	r6, [r0, #8]
+ df0:	f8c9 6008 	str.w	r6, [r9, #8]
+ df4:	6996      	ldr	r6, [r2, #24]
+ df6:	60c7      	str	r7, [r0, #12]
+ df8:	f8c9 700c 	str.w	r7, [r9, #12]
+ dfc:	69d7      	ldr	r7, [r2, #28]
+ dfe:	f8c0 8010 	str.w	r8, [r0, #16]
+ e02:	f8c9 8010 	str.w	r8, [r9, #16]
+ e06:	f8d1 8008 	ldr.w	r8, [r1, #8]
+ e0a:	f8c0 a014 	str.w	sl, [r0, #20]
+ e0e:	f8c9 a014 	str.w	sl, [r9, #20]
+ e12:	f8d1 a00c 	ldr.w	sl, [r1, #12]
+ e16:	f8c0 b018 	str.w	fp, [r0, #24]
+ e1a:	f8c9 b018 	str.w	fp, [r9, #24]
+ e1e:	f8d1 b000 	ldr.w	fp, [r1]
+ e22:	f8c0 c01c 	str.w	ip, [r0, #28]
+ e26:	f8c9 c01c 	str.w	ip, [r9, #28]
+ e2a:	f8d1 c004 	ldr.w	ip, [r1, #4]
+ e2e:	6204      	str	r4, [r0, #32]
+ e30:	f8c9 4020 	str.w	r4, [r9, #32]
+ e34:	6245      	str	r5, [r0, #36]	; 0x24
+ e36:	f8c9 5024 	str.w	r5, [r9, #36]	; 0x24
+ e3a:	6286      	str	r6, [r0, #40]	; 0x28
+ e3c:	f8c9 6028 	str.w	r6, [r9, #40]	; 0x28
+ e40:	62c7      	str	r7, [r0, #44]	; 0x2c
+ e42:	f8c9 702c 	str.w	r7, [r9, #44]	; 0x2c
+ e46:	f8c0 8030 	str.w	r8, [r0, #48]	; 0x30
+ e4a:	f8c9 8030 	str.w	r8, [r9, #48]	; 0x30
+ e4e:	f8c0 a034 	str.w	sl, [r0, #52]	; 0x34
+ e52:	f8c9 a034 	str.w	sl, [r9, #52]	; 0x34
+ e56:	f8c0 b038 	str.w	fp, [r0, #56]	; 0x38
+ e5a:	f8c9 b038 	str.w	fp, [r9, #56]	; 0x38
+ e5e:	f8c0 c03c 	str.w	ip, [r0, #60]	; 0x3c
+ e62:	f8c9 c03c 	str.w	ip, [r9, #60]	; 0x3c
+ e66:	f7ff fffe 	bl	0 <ten_double_fullround>
+ e6a:	4601      	mov	r1, r0
+ e6c:	4a2d      	ldr	r2, [pc, #180]	; (f24 <crypto_core_chacha20+0x168>)
+ e6e:	bc01      	pop	{r0}
+ e70:	680b      	ldr	r3, [r1, #0]
+ e72:	6814      	ldr	r4, [r2, #0]
+ e74:	684d      	ldr	r5, [r1, #4]
+ e76:	6856      	ldr	r6, [r2, #4]
+ e78:	688f      	ldr	r7, [r1, #8]
+ e7a:	f8d2 8008 	ldr.w	r8, [r2, #8]
+ e7e:	f8d1 900c 	ldr.w	r9, [r1, #12]
+ e82:	f8d2 a00c 	ldr.w	sl, [r2, #12]
+ e86:	f8d1 b010 	ldr.w	fp, [r1, #16]
+ e8a:	f8d2 c010 	ldr.w	ip, [r2, #16]
+ e8e:	4423      	add	r3, r4
+ e90:	6003      	str	r3, [r0, #0]
+ e92:	694b      	ldr	r3, [r1, #20]
+ e94:	6954      	ldr	r4, [r2, #20]
+ e96:	4435      	add	r5, r6
+ e98:	6045      	str	r5, [r0, #4]
+ e9a:	698d      	ldr	r5, [r1, #24]
+ e9c:	6996      	ldr	r6, [r2, #24]
+ e9e:	4447      	add	r7, r8
+ ea0:	6087      	str	r7, [r0, #8]
+ ea2:	69cf      	ldr	r7, [r1, #28]
+ ea4:	f8d2 801c 	ldr.w	r8, [r2, #28]
+ ea8:	44d1      	add	r9, sl
+ eaa:	f8c0 900c 	str.w	r9, [r0, #12]
+ eae:	f8d1 9020 	ldr.w	r9, [r1, #32]
+ eb2:	f8d2 a020 	ldr.w	sl, [r2, #32]
+ eb6:	44e3      	add	fp, ip
+ eb8:	f8c0 b010 	str.w	fp, [r0, #16]
+ ebc:	f8d1 b024 	ldr.w	fp, [r1, #36]	; 0x24
+ ec0:	f8d2 c024 	ldr.w	ip, [r2, #36]	; 0x24
+ ec4:	4423      	add	r3, r4
+ ec6:	6143      	str	r3, [r0, #20]
+ ec8:	6a8b      	ldr	r3, [r1, #40]	; 0x28
+ eca:	6a94      	ldr	r4, [r2, #40]	; 0x28
+ ecc:	4435      	add	r5, r6
+ ece:	6185      	str	r5, [r0, #24]
+ ed0:	6acd      	ldr	r5, [r1, #44]	; 0x2c
+ ed2:	6ad6      	ldr	r6, [r2, #44]	; 0x2c
+ ed4:	4447      	add	r7, r8
+ ed6:	61c7      	str	r7, [r0, #28]
+ ed8:	6b0f      	ldr	r7, [r1, #48]	; 0x30
+ eda:	f8d2 8030 	ldr.w	r8, [r2, #48]	; 0x30
+ ede:	44d1      	add	r9, sl
+ ee0:	f8c0 9020 	str.w	r9, [r0, #32]
+ ee4:	f8d1 9034 	ldr.w	r9, [r1, #52]	; 0x34
+ ee8:	f8d2 a034 	ldr.w	sl, [r2, #52]	; 0x34
+ eec:	44e3      	add	fp, ip
+ eee:	f8c0 b024 	str.w	fp, [r0, #36]	; 0x24
+ ef2:	f8d1 b038 	ldr.w	fp, [r1, #56]	; 0x38
+ ef6:	f8d2 c038 	ldr.w	ip, [r2, #56]	; 0x38
+ efa:	4423      	add	r3, r4
+ efc:	6283      	str	r3, [r0, #40]	; 0x28
+ efe:	6bcb      	ldr	r3, [r1, #60]	; 0x3c
+ f00:	6bd4      	ldr	r4, [r2, #60]	; 0x3c
+ f02:	4435      	add	r5, r6
+ f04:	62c5      	str	r5, [r0, #44]	; 0x2c
+ f06:	4447      	add	r7, r8
+ f08:	6307      	str	r7, [r0, #48]	; 0x30
+ f0a:	44d1      	add	r9, sl
+ f0c:	f8c0 9034 	str.w	r9, [r0, #52]	; 0x34
+ f10:	44e3      	add	fp, ip
+ f12:	f8c0 b038 	str.w	fp, [r0, #56]	; 0x38
+ f16:	4423      	add	r3, r4
+ f18:	63c3      	str	r3, [r0, #60]	; 0x3c
+ f1a:	e8bd 5ff0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+ f1e:	4770      	bx	lr
+	...
