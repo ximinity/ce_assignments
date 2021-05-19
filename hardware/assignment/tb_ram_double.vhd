@@ -1,10 +1,10 @@
 ----------------------------------------------------------------------------------
--- Summer School on Real-world Crypto & Privacy - Hardware Tutorial 
--- Sibenik, June 11-15, 2018 
--- 
+-- Summer School on Real-world Crypto & Privacy - Hardware Tutorial
+-- Sibenik, June 11-15, 2018
+--
 -- Author: Pedro Maat Costa Massolino
---  
--- Module Name: tb_ram_single 
+--
+-- Module Name: tb_ram_single
 -- Description: testbench for the ram_single module
 ----------------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ entity tb_ram_double is
 end tb_ram_double;
 
 architecture behavioral of tb_ram_double is
-    
+
 -- declare and initialize internal signals to drive the inputs of ram_single
 signal enable_i: std_logic := '0';
 signal clk_i: std_logic;
@@ -45,7 +45,7 @@ signal testbench_finish: boolean := false;
 
 -- declare the ram_single component
 component ram_double is
-    generic( 
+    generic(
         ws: integer := 8;
         ads: integer := 8);
     port(
@@ -62,14 +62,14 @@ end component;
 begin
 
 -- instantiate the ram_single component
--- map the generic parameter in the testbench to the generic parameter in the component  
+-- map the generic parameter in the testbench to the generic parameter in the component
 -- map the signals in the testbench to the ports of the component
 inst_ram_double: ram_double
     generic map(
         ws=>ws,
         ads=>ads
     )
-    port map(   
+    port map(
         enable=>enable_i,
         clk=>clk_i,
         din_a=>din_a_i,
@@ -79,7 +79,7 @@ inst_ram_double: ram_double
         dout_a=>dout_a_i,
         dout_b=>dout_b_i
     );
-    
+
 -- generate the clock with a duty cycle of 50%
 gen_clk: process
 begin
@@ -99,17 +99,17 @@ begin
     wait for clk_period;
     -- Fill memory module with simple pattern
     i := 0;
-    address_i_b <= std_logic_vector(to_unsigned(0, ads));
+    address_b_i <= std_logic_vector(to_unsigned(0, ads));
     while(i < 2**ads) loop
         enable_i <= '1';
-        din_i <= std_logic_vector(to_unsigned(i, ws));
-        address_i_a <= std_logic_vector(to_unsigned(i, ads));
+        din_a_i <= std_logic_vector(to_unsigned(i, ws));
+        address_a_i <= std_logic_vector(to_unsigned(i, ads));
         rw_i <= '1';
         wait for clk_period;
         i := i + 1;
     end loop;
     wait for clk_period;
-    din_i <= std_logic_vector(to_unsigned(0, ws));
+    din_a_i <= std_logic_vector(to_unsigned(0, ws));
     -- Check if pattern is correct
     i := 0;
     while(i < 2**ads) loop
@@ -152,14 +152,14 @@ begin
     wait for clk_period;
     -- Try to write with enable turned off
     enable_i <= '0';
-    din_i <= std_logic_vector(to_unsigned(0, ws));
+    din_a_i <= std_logic_vector(to_unsigned(0, ws));
     address_a_i <= std_logic_vector(to_unsigned(15, ads));
     rw_i <= '1';
     wait for clk_period;
     -- Check if it was written
     i := 15;
     enable_i <= '1';
-    din_i <= std_logic_vector(to_unsigned(0, ws));
+    din_a_i <= std_logic_vector(to_unsigned(0, ws));
     address_a_i <= std_logic_vector(to_unsigned(i, ads));
     address_b_i <= std_logic_vector(to_unsigned(i, ads));
     rw_i <= '0';
