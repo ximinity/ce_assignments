@@ -318,7 +318,7 @@ begin
     end if;
     
     wait for 3*clk_period/2;
-    
+
     testbench_finish <= true;
     wait;
 end process;
