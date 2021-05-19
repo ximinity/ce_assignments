@@ -74,7 +74,7 @@ inst_modarithn: modarithn
         rst => rst_i,
         clk => clk_i,
         start => start_i,
-        oper => command_i,
+        command => command_i,
         product => product_i,
         done => done_i
     );
@@ -157,7 +157,7 @@ begin
     
     wait for clk_period;
     
-    start_i <= '0';
+    start_i <= '1';
     
     wait until done_i = '1';
     
@@ -166,7 +166,7 @@ begin
     else
         error_comp <= '0';
     end if;
-    
+
     wait for 3*clk_period/2;
     
     command_i <= "01";
@@ -177,7 +177,7 @@ begin
     wait for clk_period;
     
     start_i <= '0';
-    
+
     wait until done_i = '1';
     
     if(product_true /= product_i) then
@@ -198,7 +198,7 @@ begin
     
     wait for clk_period;
     
-    start_i <= '0';
+    start_i <= '1';
     
     wait until done_i = '1';
     
