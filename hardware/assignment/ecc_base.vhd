@@ -4,8 +4,8 @@
 -- 
 -- Author: Pedro Maat Costa Massolino
 --  
--- Module Name: ecc_base
--- Description: Base unit that is able to run all necessary commands.
+-- Module Name: ecc_add_double
+-- Description: .
 ----------------------------------------------------------------------------------
 
 -- include the STD_LOGIC_1164 package in the IEEE library for basic functionality

@@ -14,13 +14,13 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 -- describe the interface of the module: a testbench does not have any inputs or outputs
-entity tb_ecc_add_double_small is
+entity tb_ecc_add_double is
     generic(
         n: integer := 8;
         log2n: integer := 3);
-end tb_ecc_add_double_small;
+end tb_ecc_add_double;
 
-architecture behavioral of tb_ecc_add_double_small is
+architecture behavioral of tb_ecc_add_double is
 
 -- declare and initialize internal signals to drive the inputs of ecc_add_double
 
@@ -176,6 +176,7 @@ begin
     m_enable_i <= '0';
     m_rw_i <= '0';
     m_address_i <= std_logic_vector(to_unsigned(0, 5));
+    wait until busy_i = '0';
     wait for clk_period;
     -- Perform point addition
     start_i <= '1';
