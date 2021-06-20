@@ -51,9 +51,11 @@ begin
 process(clk)
     begin
         if (rising_edge(clk)) then
+            report "ram enable " & to_string(enable);
             if(enable = '1') then
                 dout_a <= memory_ram(to_integer(to_01(unsigned(address_a))));
                 dout_b <= memory_ram(to_integer(to_01(unsigned(address_b))));
+                report "ram dout_b " & to_string(dout_b) & ", at adress: " & to_string(address_b);
                 if rw = '1' then
                     memory_ram(to_integer(to_01(unsigned(address_a)))) <= din_a;
                 end if;

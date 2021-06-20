@@ -38,17 +38,18 @@ end ecc_add_double;
 -- describe the behavior of the module in the architecture
 architecture behavioral of ecc_add_double is
 
+constant RAM_ADS: integer := 5;
+
 constant ADD_INSTR_START: integer := 0;
-constant ADD_INSTR_END: integer := 40;
-constant DBL_INSTR_START: integer := 41;
-constant DBL_INSTR_END: integer := 72;
-constant INSTR_WIDTH: Integer := 18; -- 3 bits operator, 5 bits per operand.
+constant ADD_INSTR_END: integer := 39;
+constant DBL_INSTR_START: integer := 40;
+constant DBL_INSTR_END: integer := 70;
+constant INSTR_WIDTH: Integer := 17; -- 2 bits operator, 5 bits per operand.
 constant INSTR_ADS: Integer := integer(ceil(log2(real(DBL_INSTR_END))));
 
-constant LDP_INSTR: std_logic_vector(2 downto 0) := "110";
-constant ADD_INSTR: std_logic_vector(2 downto 0) := "000";
-constant SUB_INSTR: std_logic_vector(2 downto 0) := "001";
-constant MUL_INSTR: std_logic_vector(2 downto 0) := "011";
+constant ADD_INSTR: std_logic_vector(1 downto 0) := "00";
+constant SUB_INSTR: std_logic_vector(1 downto 0) := "01";
+constant MUL_INSTR: std_logic_vector(1 downto 0) := "11";
 constant  P_ADS: std_logic_vector(4 downto 0) := "00000";
 constant  A_ADS: std_logic_vector(4 downto 0) := "00001";
 constant  B_ADS: std_logic_vector(4 downto 0) := "00010";
@@ -73,8 +74,6 @@ constant t7_ADS: std_logic_vector(4 downto 0) := "10011";
 type INSTR_ARRAY is array (0 to DBL_INSTR_END) of std_logic_vector(INSTR_WIDTH-1 downto 0);
 constant instructions: INSTR_ARRAY := (
     -- Point addition
-    (LDP_INSTR, "00000", "00000", P_ADS),
-
     (MUL_INSTR, t0_ADS, X1_ADS, X2_ADS),
     (MUL_INSTR, t1_ADS, Y1_ADS, Y2_ADS),
     (MUL_INSTR, t2_ADS, Z1_ADS, Z2_ADS),
@@ -130,8 +129,6 @@ constant instructions: INSTR_ARRAY := (
     (ADD_INSTR, Z3_ADS, Z3_ADS, t0_ADS),
     
     -- Point doubling
-    (LDP_INSTR, "00000", "00000", P_ADS),
-
     (MUL_INSTR, t0_ADS, X1_ADS, X1_ADS),
     (MUL_INSTR, t1_ADS, Y1_ADS, Y1_ADS),
     (MUL_INSTR, t2_ADS, Z1_ADS, Z1_ADS),
@@ -198,40 +195,26 @@ component ecc_base is
         m_address:in std_logic_vector(ads-1 downto 0));
 end component;
 
--- declare the ram_single component for holding instructions
-component ram_single is
-    generic( 
-        ws: integer := INSTR_WIDTH;
-        ads: integer := INSTR_ADS);
-    port(
-        enable: in std_logic;
-        clk: in std_logic;
-        din: in std_logic_vector((ws - 1) downto 0);
-        address: in std_logic_vector((ads - 1) downto 0);
-        rw: in std_logic;
-        dout: out std_logic_vector((ws - 1) downto 0));
-end component;
-
 -- Declare signals and types
 type my_state is
-    ( s_init
-    , s_load
-    , s_idle
+    ( s_idle
+    , s_load_p
     , s_execute
     , s_write_results
     );
-signal state: my_state := s_init;
+signal state: my_state := s_idle;
 
 signal exec_triggered_i: std_logic := '0';
 
 signal m_instr_end_i: unsigned(INSTR_ADS-1 downto 0);
 signal m_instr_offset_i: unsigned(INSTR_ADS-1 downto 0);
+signal m_instr_data_i: std_logic_vector(INSTR_WIDTH-1 downto 0);
 
 -- declare and initialize internal signals to drive the inputs of ecc_base
 signal base_start_i: std_logic := '0';
-signal base_oper_a_i: std_logic_vector(4 downto 0) := (others => '0');
-signal base_oper_b_i: std_logic_vector(4 downto 0) := (others => '0');
-signal base_oper_o_i: std_logic_vector(4 downto 0) := (others => '0');
+signal base_oper_a_i: std_logic_vector(RAM_ADS-1 downto 0) := (others => '0');
+signal base_oper_b_i: std_logic_vector(RAM_ADS-1 downto 0) := (others => '0');
+signal base_oper_o_i: std_logic_vector(RAM_ADS-1 downto 0) := (others => '0');
 signal base_command_i: std_logic_vector(2 downto 0) := "010";
 signal base_busy_i: std_logic;
 signal base_done_i: std_logic;
@@ -239,14 +222,7 @@ signal base_m_enable_i: std_logic := '0';
 signal base_m_din_i: std_logic_vector(n-1 downto 0);
 signal base_m_dout_i: std_logic_vector(n-1 downto 0);
 signal base_m_rw_i: std_logic := '0';
-signal base_m_address_i: std_logic_vector(4 downto 0) := (others => '0');
-
--- Instruction ram signals.
-signal instr_ram_din: std_logic_vector(INSTR_WIDTH - 1 downto 0) := (others => '0');
-signal instr_ram_address: std_logic_vector(INSTR_ADS - 1 downto 0) := (others => '0');
-signal instr_ram_rw: std_logic := '0';
-signal instr_ram_dout: std_logic_vector(INSTR_WIDTH - 1 downto 0);
-signal instr_ram_enable: std_logic := '0';
+signal base_m_address_i: std_logic_vector(RAM_ADS-1 downto 0);
 
 begin
 
@@ -254,7 +230,7 @@ inst_ecc_base: ecc_base
     generic map(
         n => n,
         log2n => log2n,
-        ads => 5
+        ads => RAM_ADS
     )
     port map(
         start=>base_start_i,
@@ -273,24 +249,9 @@ inst_ecc_base: ecc_base
         m_address=>base_m_address_i
     );
 
-inst_instr_ram: ram_single
-    generic map(
-        ws => INSTR_WIDTH,
-        ads => INSTR_ADS
-    )
-    port map(
-        enable=>instr_ram_enable,
-        clk=>clk,
-        din=>instr_ram_din,
-        address=>instr_ram_address,
-        rw=>instr_ram_rw,
-        dout=>instr_ram_dout
-    );
-
 FSM_state: process(rst, clk) is
 begin
     if rst = '1' then
-        instr_ram_address <= (others => '0');
         base_command_i <= "110";
         base_oper_o_i <= (others => '0');
         base_oper_a_i <= (others => '0');
@@ -298,83 +259,70 @@ begin
         base_start_i <= '0';
         m_instr_offset_i <= to_unsigned(0, m_instr_offset_i'length);
         m_instr_end_i <= to_unsigned(0, m_instr_end_i'length);
-        state <= s_init;
+        m_instr_data_i <= instructions(0);
+        state <= s_idle;
     elsif rising_edge(clk) then
         case state is
-            when s_init =>
-                instr_ram_address <= (others => '0');
-                base_command_i <= "110";
-                base_oper_o_i <= (others => '0');
-                base_oper_a_i <= (others => '0');
-                base_oper_b_i <= (others => '0');
-                base_start_i <= '0';
-                m_instr_offset_i <= to_unsigned(0, m_instr_offset_i'length);
-                m_instr_end_i <= to_unsigned(DBL_INSTR_END, m_instr_end_i'length);
-                state <= s_load;
-            when s_load =>
-                instr_ram_address <= (others => '0');
-                base_command_i <= "110";
-                base_oper_o_i <= (others => '0');
-                base_oper_a_i <= (others => '0');
-                base_oper_b_i <= (others => '0');
-                base_start_i <= '0';
-                m_instr_offset_i <= m_instr_offset_i + 1;
-                if m_instr_offset_i = m_instr_end_i then
-                    state <= s_idle;
-                end if;
-                instr_ram_din <= instructions(to_integer(m_instr_offset_i));
             when s_idle =>
                 base_command_i <= "110";
                 base_oper_o_i <= (others => '0');
                 base_oper_a_i <= (others => '0');
                 base_oper_b_i <= (others => '0');
                 base_start_i <= '0';
+                m_instr_data_i <= instructions(0);
                 if start = '1' then
                     if add_double = '1' then
                         m_instr_offset_i <= to_unsigned(DBL_INSTR_START, m_instr_end_i'length);
-                        instr_ram_address <= std_logic_vector(to_unsigned(DBL_INSTR_START, instr_ram_address'length));
                         m_instr_end_i <= to_unsigned(DBL_INSTR_END, m_instr_end_i'length);
                     else
                         m_instr_offset_i <= to_unsigned(ADD_INSTR_START, m_instr_end_i'length);
-                        instr_ram_address <= std_logic_vector(to_unsigned(ADD_INSTR_START, instr_ram_address'length));
                         m_instr_end_i <= to_unsigned(ADD_INSTR_END, m_instr_end_i'length);
                     end if;
+                    state <= s_load_p;
+                end if;
+            when s_load_p =>
+                base_command_i <= "110";
+                base_oper_o_i <= (others => '0');
+                base_oper_a_i <= (others => '0');
+                base_oper_b_i <= P_ADS;
+                base_start_i <= '0';
+                m_instr_data_i <= instructions(to_integer(m_instr_offset_i));
+                if exec_triggered_i = '0' then
+                    exec_triggered_i <= '1';
+                    base_start_i <= '1';
+                elsif base_done_i = '0' then
+                    base_start_i <= '0';
+                    exec_triggered_i <= '1';
+                else
+                    base_start_i <= '0';
+                    exec_triggered_i <= '0';
                     state <= s_execute;
                 end if;
             when s_execute =>
                 if exec_triggered_i = '0' then
-                    report "Triggering start for ALU";
                     exec_triggered_i <= '1';
                     base_start_i <= '1';
                 elsif base_done_i = '0' then
-                    report "Waiting till done.";
                     base_start_i <= '0';
+                    exec_triggered_i <= '1';
                 else
-                    report "Finished ALU instruction";
                     base_start_i <= '0';
                     exec_triggered_i <= '0';
                     if m_instr_offset_i = m_instr_end_i then
-                        report "Done IP is = end: " & to_string(m_instr_offset_i) & ", end: " & to_string(m_instr_end_i);
                         state <= s_write_results;
                     else
-                        report "Incrementing IP: " & to_string(m_instr_offset_i);
-                        instr_ram_address <= std_logic_vector(m_instr_offset_i + 1);
+                        m_instr_data_i <= instructions(to_integer(m_instr_offset_i + 1));
                         m_instr_offset_i <= m_instr_offset_i + 1;
                     end if;
                 end if;
 
-                report "instr_ram_addr: " & to_string(instr_ram_address);
-                report "instr_ram_dout: " & to_string(instr_ram_dout);
-                base_command_i <= instr_ram_dout(17 downto 15);
-                report "base_command_i: " & to_string(base_command_i);
-                base_oper_o_i <= instr_ram_dout(14 downto 10);
-                report "base_oper_o_i: " & to_string(base_oper_o_i);
-                base_oper_a_i <= instr_ram_dout(9 downto 5);
-                report "base_oper_a_i: " & to_string(base_oper_a_i);
-                base_oper_b_i <= instr_ram_dout(4 downto 0);
-                report "base_oper_b_i: " & to_string(base_oper_b_i);
+                base_command_i <= '0' & m_instr_data_i(16 downto 15);
+                base_oper_o_i <= m_instr_data_i(14 downto 10);
+                base_oper_a_i <= m_instr_data_i(9 downto 5);
+                base_oper_b_i <= m_instr_data_i(4 downto 0);
             when s_write_results =>
-                instr_ram_address <= (others => '0');
+                m_instr_data_i <= instructions(0);
+                m_instr_offset_i <= to_unsigned(0, m_instr_offset_i'length);
                 base_command_i <= "110";
                 base_oper_o_i <= (others => '0');
                 base_oper_a_i <= (others => '0');
@@ -385,59 +333,41 @@ begin
     end if;
 end process;
 
-FSM_out: process(state)
+FSM_out: process(state, m_enable, m_din, m_rw, m_address)
 begin
     case state is
-        when s_init =>
-            report "In state s_init";
-            instr_ram_rw <= '0';
-            instr_ram_enable <= '0';
-            base_m_enable_i <= '0';
-            base_m_din_i <= (others => '0');
-            base_m_rw_i <= '0';
-            base_m_address_i <= (others => '0');
-            done <= '0';
-            busy <= '1';
-        when s_load =>
-            report "In state s_load";
-            instr_ram_rw <= '1';
-            instr_ram_enable <= '1';
-            base_m_enable_i <= '0';
-            base_m_din_i <= (others => '0');
-            base_m_rw_i <= '0';
-            base_m_address_i <= (others => '0');
-            done <= '0';
-            busy <= '1';
         when s_idle =>
             report "In state s_idle";
-            instr_ram_rw <= '0';
-            instr_ram_enable <= '1';
-            base_m_enable_i <= '0';
-            base_m_din_i <= (others => '0');
-            base_m_rw_i <= '0';
-            base_m_address_i <= (others => '0');
             done <= '0';
             busy <= '0';
-        when s_execute =>
-            report "In state s_execute";
-            instr_ram_rw <= '0';
-            instr_ram_enable <= '1';
-            base_m_enable_i <= '0';
-            base_m_din_i <= (others => '0');
-            base_m_rw_i <= '0';
-            base_m_address_i <= (others => '0');
+            base_m_din_i <= m_din;
+            base_m_rw_i <= m_rw;
+            base_m_address_i <= m_address;
+            base_m_enable_i <= m_enable;
+        when s_load_p => 
+            report "In state s_load_p";
             done <= '0';
             busy <= '1';
-        when s_write_results =>
-            report "In state s_write_results";
-            instr_ram_rw <= '0';
-            instr_ram_enable <= '0';
-            base_m_enable_i <= '0';
             base_m_din_i <= (others => '0');
             base_m_rw_i <= '0';
             base_m_address_i <= (others => '0');
+            base_m_enable_i <= '1';
+        when s_execute =>
+            report "In state s_execute";
+            done <= '0';
+            busy <= '1';
+            base_m_din_i <= (others => '0');
+            base_m_rw_i <= '0';
+            base_m_address_i <= (others => '0');
+            base_m_enable_i <= '0';
+        when s_write_results =>
+            report "In state s_write_results";
             done <= '1';
             busy <= '1';
+            base_m_din_i <= (others => '0');
+            base_m_rw_i <= '0';
+            base_m_address_i <= (others => '0');
+            base_m_enable_i <= '0';
     end case;
 end process;
     

@@ -51,6 +51,7 @@ process(clk)
         if (rising_edge(clk)) then
             if(enable = '1') then
                 dout <= memory_ram(to_integer(to_01(unsigned(address))));
+                report "Reading from ram at offset: " & to_string(address) & ", result: " & to_string(memory_ram(to_integer(to_01(unsigned(address)))));
                 if rw = '1' then
                     memory_ram(to_integer(to_01(unsigned(address)))) <= din;
                 end if;
