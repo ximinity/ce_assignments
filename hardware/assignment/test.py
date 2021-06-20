@@ -1,6 +1,6 @@
 import sys
 
-def point_doubling(p, X1, Y1, Z1, X2, Y2, Z2, a, b3):
+def point_addition(p, X1, Y1, Z1, X2, Y2, Z2, a, b3):
   sys.stdout.write(f" 1. t0 = X1 * X2 = {X1:08b} * {X2:08b}")
   t0 = (X1 * X2) % p
   sys.stdout.write(f" = {t0:08b}\n")
@@ -132,12 +132,12 @@ if __name__ == "__main__":
   a = 0x7C
   b = 0x05
 
-  p1_x = 0x31
-  p1_y = 0x0a
-  p1_z = 0x0f
+  p1_x = 0x00
+  p1_y = 0x01
+  p1_z = 0x00
 
-  p2_x = 0x04
-  p2_y = 0x5b
-  p2_z = 0x3c
+  p2_x = 0x31
+  p2_y = 0x0a
+  p2_z = 0x0f
 
-  point_doubling(prime, p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, a, 3 * b)
+  point_addition(prime, p1_x, p1_y, p1_z, p2_x, p2_y, p2_z, a, 3 * b)

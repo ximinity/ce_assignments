@@ -17,6 +17,9 @@ use IEEE.MATH_REAL.ALL;
 -- include the NUMERIC_STD package for arithmetic operations
 use IEEE.NUMERIC_STD.ALL;
 
+library work;
+use work.ecc_constants.all;
+
 entity ecc_add_double is
     generic(
         n: integer := 8;
@@ -50,26 +53,7 @@ constant INSTR_ADS: Integer := integer(ceil(log2(real(DBL_INSTR_END))));
 constant ADD_INSTR: std_logic_vector(1 downto 0) := "00";
 constant SUB_INSTR: std_logic_vector(1 downto 0) := "01";
 constant MUL_INSTR: std_logic_vector(1 downto 0) := "11";
-constant  P_ADS: std_logic_vector(4 downto 0) := "00000";
-constant  A_ADS: std_logic_vector(4 downto 0) := "00001";
-constant  B_ADS: std_logic_vector(4 downto 0) := "00010";
-constant X1_ADS: std_logic_vector(4 downto 0) := "00011";
-constant Y1_ADS: std_logic_vector(4 downto 0) := "00100";
-constant Z1_ADS: std_logic_vector(4 downto 0) := "00101";
-constant X2_ADS: std_logic_vector(4 downto 0) := "00110";
-constant Y2_ADS: std_logic_vector(4 downto 0) := "00111";
-constant Z2_ADS: std_logic_vector(4 downto 0) := "01000";
-constant X3_ADS: std_logic_vector(4 downto 0) := "01001";
-constant Y3_ADS: std_logic_vector(4 downto 0) := "01010";
-constant Z3_ADS: std_logic_vector(4 downto 0) := "01011";
-constant t0_ADS: std_logic_vector(4 downto 0) := "01100";
-constant t1_ADS: std_logic_vector(4 downto 0) := "01101";
-constant t2_ADS: std_logic_vector(4 downto 0) := "01110";
-constant t3_ADS: std_logic_vector(4 downto 0) := "01111";
-constant t4_ADS: std_logic_vector(4 downto 0) := "10000";
-constant t5_ADS: std_logic_vector(4 downto 0) := "10001";
-constant t6_ADS: std_logic_vector(4 downto 0) := "10010";
-constant t7_ADS: std_logic_vector(4 downto 0) := "10011";
+constant C3_ADS: std_logic_vector(4 downto 0) := "10010";
 
 type INSTR_ARRAY is array (0 to DBL_INSTR_END) of std_logic_vector(INSTR_WIDTH-1 downto 0);
 constant instructions: INSTR_ARRAY := (
@@ -197,8 +181,10 @@ end component;
 
 -- Declare signals and types
 type my_state is
-    ( s_idle
+    ( s_load_constant
+    , s_idle
     , s_load_p
+    , s_triple_b
     , s_execute
     , s_write_results
     );
@@ -209,6 +195,8 @@ signal exec_triggered_i: std_logic := '0';
 signal m_instr_end_i: unsigned(INSTR_ADS-1 downto 0);
 signal m_instr_offset_i: unsigned(INSTR_ADS-1 downto 0);
 signal m_instr_data_i: std_logic_vector(INSTR_WIDTH-1 downto 0);
+
+signal b_tripled: std_logic := '0';
 
 -- declare and initialize internal signals to drive the inputs of ecc_base
 signal base_start_i: std_logic := '0';
@@ -260,9 +248,18 @@ begin
         m_instr_offset_i <= to_unsigned(0, m_instr_offset_i'length);
         m_instr_end_i <= to_unsigned(0, m_instr_end_i'length);
         m_instr_data_i <= instructions(0);
-        state <= s_idle;
+        state <= s_load_constant;
+        b_tripled <= '0';
     elsif rising_edge(clk) then
         case state is
+            when s_load_constant =>
+                base_command_i <= "110";
+                base_oper_o_i <= (others => '0');
+                base_oper_a_i <= (others => '0');
+                base_oper_b_i <= (others => '0');
+                base_start_i <= '0';
+                m_instr_data_i <= instructions(0);
+                state <= s_idle;
             when s_idle =>
                 base_command_i <= "110";
                 base_oper_o_i <= (others => '0');
@@ -270,6 +267,9 @@ begin
                 base_oper_b_i <= (others => '0');
                 base_start_i <= '0';
                 m_instr_data_i <= instructions(0);
+                if m_enable = '1' and m_rw = '1' and m_address = B_ADS then
+                    b_tripled <= '0';
+                end if;
                 if start = '1' then
                     if add_double = '1' then
                         m_instr_offset_i <= to_unsigned(DBL_INSTR_START, m_instr_end_i'length);
@@ -287,6 +287,27 @@ begin
                 base_oper_b_i <= P_ADS;
                 base_start_i <= '0';
                 m_instr_data_i <= instructions(to_integer(m_instr_offset_i));
+                if exec_triggered_i = '0' then
+                    exec_triggered_i <= '1';
+                    base_start_i <= '1';
+                elsif base_done_i = '0' then
+                    base_start_i <= '0';
+                    exec_triggered_i <= '1';
+                else
+                    base_start_i <= '0';
+                    exec_triggered_i <= '0';
+                    if b_tripled = '0' then
+                        state <= s_triple_b;
+                    else
+                        state <= s_execute;
+                    end if;
+                end if;
+            when s_triple_b =>
+                base_command_i <= '0' & MUL_INSTR;
+                base_oper_o_i <= B_ADS;
+                base_oper_a_i <= C3_ADS;
+                base_oper_b_i <= B_ADS;
+                b_tripled <= '1';
                 if exec_triggered_i = '0' then
                     exec_triggered_i <= '1';
                     base_start_i <= '1';
@@ -315,7 +336,6 @@ begin
                         m_instr_offset_i <= m_instr_offset_i + 1;
                     end if;
                 end if;
-
                 base_command_i <= '0' & m_instr_data_i(16 downto 15);
                 base_oper_o_i <= m_instr_data_i(14 downto 10);
                 base_oper_a_i <= m_instr_data_i(9 downto 5);
@@ -333,38 +353,54 @@ begin
     end if;
 end process;
 
-FSM_out: process(state, m_enable, m_din, m_rw, m_address)
+FSM_out: process(state, base_m_dout_i, m_enable, m_din, m_rw, m_address)
 begin
     case state is
+        when s_load_constant =>
+            done <= '0';
+            busy <= '1';
+            base_m_din_i <= std_logic_vector(to_unsigned(3, base_m_din_i'length));
+            m_dout <= (others => '0');
+            base_m_rw_i <= '1';
+            base_m_address_i <= C3_ADS;
+            base_m_enable_i <= '1';
         when s_idle =>
-            report "In state s_idle";
             done <= '0';
             busy <= '0';
             base_m_din_i <= m_din;
+            m_dout <= base_m_dout_i;
             base_m_rw_i <= m_rw;
             base_m_address_i <= m_address;
             base_m_enable_i <= m_enable;
         when s_load_p => 
-            report "In state s_load_p";
             done <= '0';
             busy <= '1';
             base_m_din_i <= (others => '0');
+            m_dout <= (others => '0');
+            base_m_rw_i <= '0';
+            base_m_address_i <= (others => '0');
+            base_m_enable_i <= '1';
+        when s_triple_b =>
+            done <= '0';
+            busy <= '1';
+            base_m_din_i <= (others => '0');
+            m_dout <= (others => '0');
             base_m_rw_i <= '0';
             base_m_address_i <= (others => '0');
             base_m_enable_i <= '1';
         when s_execute =>
-            report "In state s_execute";
             done <= '0';
             busy <= '1';
             base_m_din_i <= (others => '0');
+            m_dout <= (others => '0');
             base_m_rw_i <= '0';
             base_m_address_i <= (others => '0');
             base_m_enable_i <= '0';
         when s_write_results =>
-            report "In state s_write_results";
             done <= '1';
             busy <= '1';
             base_m_din_i <= (others => '0');
+            m_dout <= (others => '0');
             base_m_rw_i <= '0';
             base_m_address_i <= (others => '0');
             base_m_enable_i <= '0';

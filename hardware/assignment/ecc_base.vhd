@@ -146,7 +146,6 @@ begin
             reg_oper_a <= oper_a;
             reg_oper_b <= oper_b;
             reg_comm <= command;
-            report "Running instr in ALU, instr: " & to_string(command) & ", out: " & to_string(oper_o) & ", a: " & to_string(oper_a) & ", b: " & to_string(oper_b);
         end if;
     end if;
 end process;
@@ -179,7 +178,6 @@ begin
         p <= (others => '0');
     elsif rising_edge(clk) then
         if p_enable = '1' then
-            report "Loaded prime: " & to_string(b);
             p <= b;
         else
             p <= p;

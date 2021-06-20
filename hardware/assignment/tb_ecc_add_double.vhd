@@ -26,7 +26,7 @@ architecture behavioral of tb_ecc_add_double is
 
 constant ecc_prime: std_logic_vector(7 downto 0) := X"7F";
 constant ecc_a: std_logic_vector(7 downto 0) := X"7C";
-constant ecc_b: std_logic_vector(7 downto 0) := X"0F"; -- b = X"05" but we need 3b
+constant ecc_b: std_logic_vector(7 downto 0) := X"05";
 
 constant ecc_p1_x: std_logic_vector(7 downto 0) := X"31";
 constant ecc_p1_y: std_logic_vector(7 downto 0) := X"0a";
@@ -126,6 +126,7 @@ begin
     
     rst_i <= '0';
     
+    wait until busy_i = '0';
     wait for clk_period;
     -- Fill memory with the ecc constants and points
     m_enable_i <= '1';
@@ -192,84 +193,87 @@ begin
     m_rw_i <= '0';
     m_address_i <= std_logic_vector(to_unsigned(9, m_address_i'length));
     wait for clk_period;
-    report "expected " & to_string(ecc_p1_plus_p2_x) & "/= " & to_string(m_dout_i);
     if(ecc_p1_plus_p2_x /= m_dout_i) then
         error_comp <= '1';
     else
         error_comp <= '0';
     end if;
     wait for clk_period;
+    report "error: " & to_string(error_comp);
     error_comp <= '0';
     m_enable_i <= '1';
     m_din_i <= (others=>'0');
     m_rw_i <= '0';
     m_address_i <= std_logic_vector(to_unsigned(10, m_address_i'length));
     wait for clk_period;
-    report "expected " & to_string(ecc_p1_plus_p2_y) & "/= " & to_string(m_dout_i);
     if(ecc_p1_plus_p2_y /= m_dout_i) then
         error_comp <= '1';
     else
         error_comp <= '0';
     end if;
     wait for clk_period;
+    report "error: " & to_string(error_comp);
     error_comp <= '0';
     m_enable_i <= '1';
     m_din_i <= (others=>'0');
     m_rw_i <= '0';
     m_address_i <= std_logic_vector(to_unsigned(11, m_address_i'length));
     wait for clk_period;
-    report "expected " & to_string(ecc_p1_plus_p2_z) & "/= " & to_string(m_dout_i);
     if(ecc_p1_plus_p2_z /= m_dout_i) then
         error_comp <= '1';
     else
         error_comp <= '0';
     end if;
     wait for clk_period;
+    report "error: " & to_string(error_comp);
     -- Perform point doubling
-    -- start_i <= '1';
-    -- add_double_i <= '1';
-    -- wait for clk_period;
-    -- start_i <= '0';
-    -- wait until done_i = '1';
-    -- wait for 3*clk_period/2;
-    -- -- Retrieve value
-    -- wait for clk_period;
-    -- error_comp <= '0';
-    -- m_enable_i <= '1';
-    -- m_din_i <= (others=>'0');
-    -- m_rw_i <= '0';
-    -- m_address_i <= std_logic_vector(to_unsigned(9, m_address_i'length));
-    -- wait for clk_period;
-    -- if(ecc_p1_double_x /= m_dout_i) then
-    --     error_comp <= '1';
-    -- else
-    --     error_comp <= '0';
-    -- end if;
-    -- wait for clk_period;
-    -- error_comp <= '0';
-    -- m_enable_i <= '1';
-    -- m_din_i <= (others=>'0');
-    -- m_rw_i <= '0';
-    -- m_address_i <= std_logic_vector(to_unsigned(10, m_address_i'length));
-    -- wait for clk_period;
-    -- if(ecc_p1_double_y /= m_dout_i) then
-    --     error_comp <= '1';
-    -- else
-    --     error_comp <= '0';
-    -- end if;
-    -- wait for clk_period;
-    -- error_comp <= '0';
-    -- m_enable_i <= '1';
-    -- m_din_i <= (others=>'0');
-    -- m_rw_i <= '0';
-    -- m_address_i <= std_logic_vector(to_unsigned(11, m_address_i'length));
-    -- wait for clk_period;
-    -- if(ecc_p1_double_z /= m_dout_i) then
-    --     error_comp <= '1';
-    -- else
-    --     error_comp <= '0';
-    -- end if;
-    -- wait for 3*clk_period/2;
+    start_i <= '1';
+    add_double_i <= '1';
+    wait for clk_period;
+    start_i <= '0';
+    wait until done_i = '1';
+    wait for 3*clk_period/2;
+    -- Retrieve value
+    wait for clk_period;
+    error_comp <= '0';
+    m_enable_i <= '1';
+    m_din_i <= (others=>'0');
+    m_rw_i <= '0';
+    m_address_i <= std_logic_vector(to_unsigned(9, m_address_i'length));
+    wait for clk_period;
+    if(ecc_p1_double_x /= m_dout_i) then
+        error_comp <= '1';
+    else
+        error_comp <= '0';
+    end if;
+    wait for clk_period;
+    report "error: " & to_string(error_comp);
+    error_comp <= '0';
+    m_enable_i <= '1';
+    m_din_i <= (others=>'0');
+    m_rw_i <= '0';
+    m_address_i <= std_logic_vector(to_unsigned(10, m_address_i'length));
+    wait for clk_period;
+    if(ecc_p1_double_y /= m_dout_i) then
+        error_comp <= '1';
+    else
+        error_comp <= '0';
+    end if;
+    wait for clk_period;
+    report "error: " & to_string(error_comp);
+    error_comp <= '0';
+    m_enable_i <= '1';
+    m_din_i <= (others=>'0');
+    m_rw_i <= '0';
+    m_address_i <= std_logic_vector(to_unsigned(11, m_address_i'length));
+    wait for clk_period;
+    if(ecc_p1_double_z /= m_dout_i) then
+        error_comp <= '1';
+    else
+        error_comp <= '0';
+    end if;
+    wait for 3*clk_period/2;
+    report "error: " & to_string(error_comp);
     testbench_finish <= true;
     wait;
 end process;

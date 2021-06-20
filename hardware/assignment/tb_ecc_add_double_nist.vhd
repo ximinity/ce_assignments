@@ -14,18 +14,20 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 -- describe the interface of the module: a testbench does not have any inputs or outputs
-entity tb_ecc_add_double_nist is
+entity tb_ecc_add_double is
     generic(
         n: integer := 256;
         log2n: integer := 8);
-end tb_ecc_add_double_nist;
+end tb_ecc_add_double;
 
-architecture behavioral of tb_ecc_add_double_nist is
+architecture behavioral of tb_ecc_add_double is
 
 -- declare and initialize internal signals to drive the inputs of ecc_add_double
 
 constant ecc_prime: std_logic_vector(n-1 downto 0) := X"ffffffff00000001000000000000000000000000ffffffffffffffffffffffff";
 constant ecc_a: std_logic_vector(n-1 downto 0) := X"ffffffff00000001000000000000000000000000fffffffffffffffffffffffc";
+-- X"5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b";
+-- 3b: 1052a18afeafbbb61bc3380063c994352f57141164fb12e2b36ab4ba777720e2
 constant ecc_b: std_logic_vector(n-1 downto 0) := X"5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b";
 
 constant ecc_p1_x: std_logic_vector(n-1 downto 0) := X"82ff10b5ce3ef76b3d479fbf67b1814adf32c22b7d6bfa8d52c6634ab5562f31";
@@ -125,6 +127,7 @@ begin
     
     rst_i <= '0';
     
+    wait until busy_i = '0';
     wait for clk_period;
     -- Fill memory with the ecc constants and points
     m_enable_i <= '1';
@@ -197,6 +200,7 @@ begin
         error_comp <= '0';
     end if;
     wait for clk_period;
+    report "error: " & to_string(error_comp);
     error_comp <= '0';
     m_enable_i <= '1';
     m_din_i <= (others=>'0');
@@ -209,6 +213,7 @@ begin
         error_comp <= '0';
     end if;
     wait for clk_period;
+    report "error: " & to_string(error_comp);
     error_comp <= '0';
     m_enable_i <= '1';
     m_din_i <= (others=>'0');
@@ -224,6 +229,7 @@ begin
     start_i <= '1';
     add_double_i <= '1';
     wait for clk_period;
+    report "error: " & to_string(error_comp);
     start_i <= '0';
     wait until done_i = '1';
     wait for 3*clk_period/2;
@@ -241,6 +247,7 @@ begin
         error_comp <= '0';
     end if;
     wait for clk_period;
+    report "error: " & to_string(error_comp);
     error_comp <= '0';
     m_enable_i <= '1';
     m_din_i <= (others=>'0');
@@ -253,6 +260,7 @@ begin
         error_comp <= '0';
     end if;
     wait for clk_period;
+    report "error: " & to_string(error_comp);
     error_comp <= '0';
     m_enable_i <= '1';
     m_din_i <= (others=>'0');
@@ -265,6 +273,7 @@ begin
         error_comp <= '0';
     end if;
     wait for 3*clk_period/2;
+    report "error: " & to_string(error_comp);
     testbench_finish <= true;
     wait;
 end process;

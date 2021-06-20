@@ -51,11 +51,29 @@ begin
 process(clk)
     begin
         if (rising_edge(clk)) then
-            report "ram enable " & to_string(enable);
+            report "prime: " & to_string(memory_ram(0));
+            report "a: " & to_string(memory_ram(1));
+            report "b: " & to_string(memory_ram(2));
+            report "X1: " & to_string(memory_ram(3));
+            report "Y1: " & to_string(memory_ram(4));
+            report "Z1: " & to_string(memory_ram(5));
+            report "X2: " & to_string(memory_ram(6));
+            report "Y2: " & to_string(memory_ram(7));
+            report "Z2: " & to_string(memory_ram(8));
+            report "X3: " & to_string(memory_ram(9));
+            report "Y3: " & to_string(memory_ram(10));
+            report "Z3: " & to_string(memory_ram(11));
+            report "t0: " & to_string(memory_ram(12));
+            report "t1: " & to_string(memory_ram(13));
+            report "t2: " & to_string(memory_ram(14));
+            report "t3: " & to_string(memory_ram(15));
+            report "t4: " & to_string(memory_ram(16));
+            report "t5: " & to_string(memory_ram(17));
+            report "c3: " & to_string(memory_ram(18));
+
             if(enable = '1') then
                 dout_a <= memory_ram(to_integer(to_01(unsigned(address_a))));
                 dout_b <= memory_ram(to_integer(to_01(unsigned(address_b))));
-                report "ram dout_b " & to_string(dout_b) & ", at adress: " & to_string(address_b);
                 if rw = '1' then
                     memory_ram(to_integer(to_01(unsigned(address_a)))) <= din_a;
                 end if;
