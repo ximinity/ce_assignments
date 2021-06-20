@@ -263,6 +263,7 @@ begin
                 state <= s_add_store_y3;
             when s_add_store_y3 =>
                 report "===== s_add_store_y3 ====";
+                report "point_m_dout_i: " & to_string(point_m_dout_i);
                 if scalar_i(to_integer(n_i)) = '1' then
                     r0y_i <= point_m_dout_i;
                 else
@@ -273,6 +274,7 @@ begin
                 state <= s_add_store_z3;
             when s_add_store_z3 =>
                 report "===== s_add_store_z3 ====";
+                report "point_m_dout_i: " & to_string(point_m_dout_i);
                 if scalar_i(to_integer(n_i)) = '1' then
                     report "point add bit 1 " & to_string(n_i) & " x: " & to_string(r0x_i) & ", y: " & to_string(r0y_i) & ", z: " & to_string(point_m_dout_i);
                     r0z_i <= point_m_dout_i;
@@ -283,6 +285,7 @@ begin
                 state <= s_double_load_x1;
             when s_double_load_x1 =>
                 report "===== s_double_load_x1 ==";
+                report "point_m_dout_i: " & to_string(point_m_dout_i);
                 if scalar_i(to_integer(n_i)) = '1' then
                     point_m_din_i <= r1x_i;
                 else
@@ -293,6 +296,7 @@ begin
                 state <= s_double_load_y1;
             when s_double_load_y1 =>
                 report "===== s_double_load_y1 ==";
+                report "point_m_dout_i: " & to_string(point_m_dout_i);
                 if scalar_i(to_integer(n_i)) = '1' then
                     point_m_din_i <= r1y_i;
                 else
@@ -303,6 +307,7 @@ begin
                 state <= s_double_load_z1;
             when s_double_load_z1 =>
                 report "===== s_double_load_z1 ==";
+                report "point_m_dout_i: " & to_string(point_m_dout_i);
                 if scalar_i(to_integer(n_i)) = '1' then
                     point_m_din_i <= r1z_i;
                 else
@@ -330,6 +335,7 @@ begin
                 end if;
             when s_double_store_x3 =>
                 report "===== s_double_store_x3 =====";
+                report "point_m_dout_i: " & to_string(point_m_dout_i);
                 if scalar_i(to_integer(n_i)) = '1' then
                     r1x_i <= point_m_dout_i;
                 else
@@ -340,6 +346,7 @@ begin
                 state <= s_double_store_y3;
             when s_double_store_y3 =>
                 report "===== s_double_store_y3 =====";
+                report "point_m_dout_i: " & to_string(point_m_dout_i);
                 if scalar_i(to_integer(n_i)) = '1' then
                     r1y_i <= point_m_dout_i;
                 else
@@ -350,6 +357,7 @@ begin
                 state <= s_double_store_z3;
             when s_double_store_z3 =>
                 report "===== s_double_store_z3 =====";
+                report "point_m_dout_i: " & to_string(point_m_dout_i);
                 if scalar_i(to_integer(n_i)) = '1' then
                     report "point doubling bit 1 " & to_string(n_i) & " x: " & to_string(r1x_i) & ", y: " & to_string(r1y_i) & ", z: " & to_string(point_m_dout_i);
                     r1z_i <= point_m_dout_i;
@@ -393,14 +401,14 @@ begin
                 | s_double_store_x3 | s_double_store_y3 | s_double_store_z3 =>
                 point_m_enable_i <= '1';
             when s_add_exec | s_double_exec =>
-                point_m_enable_i <= '0';
+                point_m_enable_i <= '1';
             when s_write_results =>
                 point_m_enable_i <= '0';
         end case;
     end if;
 end process;
 
-FSM_out: process(clk, state)
+FSM_out: process(state)
 begin
     case state is
         when s_comp_init =>
