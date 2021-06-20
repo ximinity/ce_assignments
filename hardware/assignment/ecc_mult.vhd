@@ -274,8 +274,10 @@ begin
             when s_add_store_z3 =>
                 report "===== s_add_store_z3 ====";
                 if scalar_i(to_integer(n_i)) = '1' then
+                    report "point add bit 1 " & to_string(n_i) & " x: " & to_string(r0x_i) & ", y: " & to_string(r0y_i) & ", z: " & to_string(point_m_dout_i);
                     r0z_i <= point_m_dout_i;
                 else
+                    report "point add bit 0 " & to_string(n_i) & " x: " & to_string(r1x_i) & ", y: " & to_string(r1y_i) & ", z: " & to_string(point_m_dout_i);
                     r1z_i <= point_m_dout_i;
                 end if;
                 state <= s_double_load_x1;
@@ -349,8 +351,10 @@ begin
             when s_double_store_z3 =>
                 report "===== s_double_store_z3 =====";
                 if scalar_i(to_integer(n_i)) = '1' then
+                    report "point doubling bit 1 " & to_string(n_i) & " x: " & to_string(r1x_i) & ", y: " & to_string(r1y_i) & ", z: " & to_string(point_m_dout_i);
                     r1z_i <= point_m_dout_i;
                 else
+                    report "point doubling bit 0 " & to_string(n_i) & " x: " & to_string(r0x_i) & ", y: " & to_string(r0y_i) & ", z: " & to_string(point_m_dout_i);
                     r0z_i <= point_m_dout_i;
                 end if;
                 if n_i = to_unsigned(0, n_i'length) then
