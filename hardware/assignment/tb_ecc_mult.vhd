@@ -15,26 +15,27 @@ use IEEE.NUMERIC_STD.ALL;
 -- describe the interface of the module: a testbench does not have any inputs or outputs
 entity tb_ecc_mult is
     generic(
-        n: integer := 8;
-        log2n: integer := 3);
+        n: integer := 256;
+        log2n: integer := 8);
 end tb_ecc_mult;
 
 architecture behavioral of tb_ecc_mult is
 
 -- declare and initialize internal signals to drive the inputs of ecc_mult
-constant ecc_prime: std_logic_vector(n-1 downto 0) := X"7F";
-constant ecc_a: std_logic_vector(n-1 downto 0) := X"7C";
-constant ecc_b: std_logic_vector(n-1 downto 0) := X"05";
 
-constant ecc_s: std_logic_vector(n-1 downto 0) := X"C0";
+constant ecc_prime: std_logic_vector(n-1 downto 0) := X"ffffffff00000001000000000000000000000000ffffffffffffffffffffffff";
+constant ecc_a: std_logic_vector(n-1 downto 0) := X"ffffffff00000001000000000000000000000000fffffffffffffffffffffffc";
+constant ecc_b: std_logic_vector(n-1 downto 0) := X"5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b";
 
-constant ecc_g_x: std_logic_vector(n-1 downto 0) := X"31";
-constant ecc_g_y: std_logic_vector(n-1 downto 0) := X"0a";
-constant ecc_g_z: std_logic_vector(n-1 downto 0) := X"0f";
+constant ecc_s: std_logic_vector(n-1 downto 0) := X"C03A898C5E674B2CE564F25F96BB8AE944985061ACCE54CAA5554BB508542151";
 
-constant ecc_sg_x: std_logic_vector(n-1 downto 0) := X"00";
-constant ecc_sg_y: std_logic_vector(n-1 downto 0) := X"00";
-constant ecc_sg_z: std_logic_vector(n-1 downto 0) := X"00";
+constant ecc_g_x: std_logic_vector(n-1 downto 0) := X"6B17D1F2E12C4247F8BCE6E563A440F277037D812DEB33A0F4A13945D898C296";
+constant ecc_g_y: std_logic_vector(n-1 downto 0) := X"4FE342E2FE1A7F9B8EE7EB4A7C0F9E162BCE33576B315ECECBB6406837BF51F5";
+constant ecc_g_z: std_logic_vector(n-1 downto 0) := X"0000000000000000000000000000000000000000000000000000000000000001";
+
+constant ecc_sg_x: std_logic_vector(n-1 downto 0) := X"B586EFD756C25F6BC6469AA162BAC531C877C99DF5CBD8F95EEF31CE74226860";
+constant ecc_sg_y: std_logic_vector(n-1 downto 0) := X"8E5C8AAD3B74642DBF40A6851090A6DB6210C97AFE36CCF65300CC2F6514DE66";
+constant ecc_sg_z: std_logic_vector(n-1 downto 0) := X"5590FD84B53850234D3CEF495D7DB307470C449A1CA8431F184D4DDDB70B3714";
 
 signal start_i: std_logic := '0';
 signal rst_i: std_logic := '1';

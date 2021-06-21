@@ -236,9 +236,6 @@ begin
         error_comp <= '0';
     end if;
     -- Perform point doubling
-    op_o_i <= "00";
-    op_a_i <= "01";
-    op_b_i <= "00";
     start_i <= '1';
     add_double_i <= '1';
     wait for clk_period;

@@ -119,6 +119,10 @@ constant instructions: INSTR_ARRAY := (
     (MUL_INSTR, t0_ADS, X1_ADS, X1_ADS),
     (MUL_INSTR, t1_ADS, Y1_ADS, Y1_ADS),
     (MUL_INSTR, t2_ADS, Z1_ADS, Z1_ADS),
+    -- We store use an additional
+    -- temporary here because points
+    -- can overlap for us
+    (MUL_INSTR, t4_ADS, Y1_ADS, Z1_ADS),
 
     (MUL_INSTR, t3_ADS, X1_ADS, Y1_ADS),
     (ADD_INSTR, t3_ADS, t3_ADS, t3_ADS),
@@ -148,8 +152,9 @@ constant instructions: INSTR_ARRAY := (
     (MUL_INSTR, t0_ADS, t0_ADS, t3_ADS),
     (ADD_INSTR, Y3_ADS, Y3_ADS, t0_ADS),
 
-    (MUL_INSTR, t2_ADS, Y1_ADS, Z1_ADS),
-    (ADD_INSTR, t2_ADS, t2_ADS, t2_ADS),
+    -- This has now been done earlier
+    -- (MUL_INSTR, t2_ADS, Y1_ADS, Z1_ADS),
+    (ADD_INSTR, t2_ADS, t4_ADS, t4_ADS),
     (MUL_INSTR, t0_ADS, t2_ADS, t3_ADS),
 
     (SUB_INSTR, X3_ADS, X3_ADS, t0_ADS),

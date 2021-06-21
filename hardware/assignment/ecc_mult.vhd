@@ -90,6 +90,9 @@ type my_state is
     , s_init_z2
     , s_add_exec
     , s_double_exec
+    , s_result_r0x
+    , s_result_r0y
+    , s_result_r0z
     , s_write_results
     );
 signal state: my_state := s_comp_init;
@@ -160,57 +163,30 @@ begin
                 end if;
             when s_init_prime =>
                 report "===== s_init_prime =====";
-                point_m_din_i <= prime;
-                point_m_rw_i <= '1';
-                point_m_address_i <= P_ADS;
                 state <= s_init_a;
             when s_init_a =>
                 report "===== s_init_a =====";
-                point_m_din_i <= a;
-                point_m_rw_i <= '1';
-                point_m_address_i <= A_ADS;
                 state <= s_init_b;
             when s_init_b =>
                 report "===== s_init_b =====";
-                point_m_din_i <= b;
-                point_m_rw_i <= '1';
-                point_m_address_i <= B_ADS;
                 state <= s_init_x1;
             when s_init_x1 =>
                 report "===== s_init_x1 =====";
-                point_m_din_i <= (others => '0');
-                point_m_rw_i <= '1';
-                point_m_address_i <= X1_ADS;
                 state <= s_init_y1;
             when s_init_y1 =>
                 report "===== s_init_y1 =====";
-                point_m_din_i <= std_logic_vector(to_unsigned(1, point_m_din_i'length));
-                point_m_rw_i <= '1';
-                point_m_address_i <= Y1_ADS;
                 state <= s_init_z1;
             when s_init_z1 =>
                 report "===== s_init_z1 =====";
-                point_m_din_i <= (others => '0');
-                point_m_rw_i <= '1';
-                point_m_address_i <= Z1_ADS;
                 state <= s_init_x2;
             when s_init_x2 =>
                 report "===== s_init_x2 =====";
-                point_m_din_i <= gx;
-                point_m_rw_i <= '1';
-                point_m_address_i <= X2_ADS;
                 state <= s_init_y2;
             when s_init_y2 =>
                 report "===== s_init_y2 =====";
-                point_m_din_i <= gy;
-                point_m_rw_i <= '1';
-                point_m_address_i <= Y2_ADS;
                 state <= s_init_z2;
             when s_init_z2 =>
                 report "===== s_init_z2 =====";
-                point_m_din_i <= gz;
-                point_m_rw_i <= '1';
-                point_m_address_i <= Z2_ADS;
                 state <= s_add_exec;
                 report "===== s_add_exec =====";
                 if scalar(to_integer(n_i)) = '1' then
@@ -261,7 +237,7 @@ begin
                     next_n := n_i - to_unsigned(1, n_i'length);
                     
                     if n_i = to_unsigned(0, n_i'length) then
-                        state <= s_write_results;
+                        state <= s_result_r0x;
                     elsif scalar(to_integer(next_n)) = '1' then
                         op_o_i <= "00";
                         op_a_i <= "00";
@@ -276,31 +252,109 @@ begin
                         state <= s_add_exec;
                     end if;
                 end if;
+            when s_result_r0x =>
+                state <= s_result_r0y;
+            when s_result_r0y =>
+                report "sgx: " & to_string(point_m_dout_i);
+                sgx <= point_m_dout_i;
+                state <= s_result_r0z;
+            when s_result_r0z =>
+                report "sgy: " & to_string(point_m_dout_i);
+                sgy <= point_m_dout_i;
+                state <= s_write_results;
             when s_write_results =>
                 report "===== S_WRITE_RESULTS =====";
+                report "sgz: " & to_string(point_m_dout_i);
+                sgz <= point_m_dout_i;
                 state <= s_idle;
         end case;
     end if;
 end process;
 
-FSM_enable: process(clk)
+FSM_mem: process(state)
 begin
-    if rising_edge(clk) then
-        case state is
-            when s_comp_init =>
-                point_m_enable_i <= '0';
-            when s_idle =>
-                point_m_enable_i <= '0';
-            when s_init_prime | s_init_a | s_init_b 
-                 | s_init_x1 | s_init_y1 | s_init_z1
-                 | s_init_x2 | s_init_y2 | s_init_z2 =>
-                point_m_enable_i <= '1';
-            when s_add_exec | s_double_exec =>
-                point_m_enable_i <= '0';
-            when s_write_results =>
-                point_m_enable_i <= '0';
-        end case;
-    end if;
+    case state is
+        when s_comp_init =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '0';
+            point_m_address_i <= (others => '0');
+            point_m_enable_i <= '0';
+        when s_idle =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '0';
+            point_m_address_i <= (others => '0');
+            point_m_enable_i <= '0';
+        when s_init_prime =>
+            point_m_din_i <= prime;
+            point_m_rw_i <= '1';
+            point_m_address_i <= P_ADS;
+            point_m_enable_i <= '1';
+        when s_init_a =>
+            point_m_din_i <= a;
+            point_m_rw_i <= '1';
+            point_m_address_i <= A_ADS;
+            point_m_enable_i <= '1';
+        when s_init_b =>
+            point_m_din_i <= b;
+            point_m_rw_i <= '1';
+            point_m_address_i <= B_ADS;
+            point_m_enable_i <= '1';
+        when s_init_x1 =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '1';
+            point_m_address_i <= X1_ADS;
+            point_m_enable_i <= '1';
+        when s_init_y1 =>
+            point_m_din_i <= std_logic_vector(to_unsigned(1, point_m_din_i'length));
+            point_m_rw_i <= '1';
+            point_m_address_i <= Y1_ADS;
+            point_m_enable_i <= '1';
+        when s_init_z1 =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '1';
+            point_m_address_i <= Z1_ADS;
+            point_m_enable_i <= '1';
+        when s_init_x2 =>
+            point_m_din_i <= gx;
+            point_m_rw_i <= '1';
+            point_m_address_i <= X2_ADS;
+            point_m_enable_i <= '1';
+        when s_init_y2 =>
+            point_m_din_i <= gy;
+            point_m_rw_i <= '1';
+            point_m_address_i <= Y2_ADS;
+            point_m_enable_i <= '1';
+        when s_init_z2 =>
+            point_m_din_i <= gz;
+            point_m_rw_i <= '1';
+            point_m_address_i <= Z2_ADS;
+            point_m_enable_i <= '1';
+        when s_add_exec | s_double_exec =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '0';
+            point_m_address_i <= (others => '0');
+            point_m_enable_i <= '0';
+        when s_result_r0x =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '0';
+            point_m_address_i <= X1_ADS;
+            point_m_enable_i <= '1';
+        when s_result_r0y =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '0';
+            point_m_address_i <= Y1_ADS;
+            point_m_enable_i <= '1';
+        when s_result_r0z =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '0';
+            point_m_address_i <= Z1_ADS;
+            point_m_enable_i <= '1';
+        when s_write_results =>
+            point_m_din_i <= (others => '0');
+            point_m_rw_i <= '0';
+            point_m_address_i <= (others => '0');
+            point_m_enable_i <= '0';
+    end case;
 end process;
 
 FSM_out: process(state)
@@ -315,7 +369,8 @@ begin
         when s_init_prime | s_init_a | s_init_b 
              | s_init_x1 | s_init_y1 | s_init_z1
              | s_init_x2 | s_init_y2 | s_init_z2
-             | s_add_exec | s_double_exec =>
+             | s_add_exec | s_double_exec
+             | s_result_r0x | s_result_r0y | s_result_r0z =>
             busy <= '1';
             done <= '0';
         when s_write_results =>

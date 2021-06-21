@@ -169,25 +169,14 @@ def scalar_mult(p, X1, Y1, Z1, s, a, b3):
 
 
 if __name__ == "__main__":
-  p = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
-  a = 0xffffffff00000001000000000000000000000000fffffffffffffffffffffffc
-  b = 0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b
-  b3 = 3 * b
-  x = 0x771237aee432c1de1760a14d5ef2dc2bed90151a4512254b3a8166b46d8d03d3
-  y = 0x24a827e6110102663b61e20b703294289f517c602bcfbdb28eba3d358ef04207
-  z = 0x67e35ea00df06783de49f09bb1d0bfc6d32246304390fa40f9f0153f92fbd519
-  (x2,y2,z2) = point_doubling(p, x, y, z, a,b3)
-  
-  print(f"x: {x2:256b}, y: {y2:256b}, z: {z2:256b}")
+  p = 0x7F
+  a = 0x7C
+  b = 0x05
 
-  # p = 0x7F
-  # a = 0x7C
-  # b = 0x05
+  g_x = 0x31
+  g_y = 0x0a
+  g_z = 0x0f
 
-  # g_x = 0x31
-  # g_y = 0x0a
-  # g_z = 0x0f
+  s = 0xAA
 
-  # s = 0xC0
-
-  # (X3, Y3, Z3) = scalar_mult(p, g_x, g_y, g_z, s, a, 3 * b)
+  (X3, Y3, Z3) = scalar_mult(p, g_x, g_y, g_z, s, a, 3 * b)

@@ -48,7 +48,7 @@ signal start_i: std_logic := '0';
 signal rst_i: std_logic := '1';
 signal clk_i: std_logic := '0';
 signal add_double_i: std_logic := '0';
-signal op_o_i: std_logic_vector(1 downto 0) := "01";
+signal op_o_i: std_logic_vector(1 downto 0) := "10";
 signal op_a_i: std_logic_vector(1 downto 0) := "00";
 signal op_b_i: std_logic_vector(1 downto 0) := "01";
 signal busy_i: std_logic;

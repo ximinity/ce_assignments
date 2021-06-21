@@ -147,6 +147,7 @@ begin
             when s_idle =>
                 if start = '1' then
                     if command = "11" then -- multiplication
+                        -- report "MUL, a: " & to_string(unsigned(a)) & ", b: " & to_string(unsigned(b)); 
                         ctr <= to_unsigned(0, ctr'length);
                         flush_ctr <= to_unsigned(0, flush_ctr'length);
                         as <= '0';
@@ -154,6 +155,11 @@ begin
                     elsif command(1) = '0' then -- addition/subtraction
                         state <= s_addsub;
                         as <= command(0);
+                        -- if command(0) = '1' then
+                        --     report "SUB, a: " & to_string(unsigned(a)) & ", b: " & to_string(unsigned(b)); 
+                        -- else
+                        --     report "ADD, a: " & to_string(unsigned(a)) & ", b: " & to_string(unsigned(b)); 
+                        -- end if;
                     end if;
                 end if;
             when s_shift =>
@@ -164,9 +170,11 @@ begin
             when s_flush =>
                 flush_ctr <= flush_ctr + 1;
                 if flush_ctr = 1 then
+                    -- report "RESULT: " & to_string(unsigned(c));
                     state <= s_done;
                 end if;
             when s_addsub =>
+                -- report "RESULT: " & to_string(unsigned(c));
                 state <= s_done;
             when others =>
                 state <= s_idle;
