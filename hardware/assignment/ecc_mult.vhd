@@ -65,6 +65,9 @@ component ecc_add_double is
         add_double: in std_logic;
         done: out std_logic;
         busy: out std_logic;
+        op_o: in std_logic_vector(1 downto 0);
+        op_a: in std_logic_vector(1 downto 0);
+        op_b: in std_logic_vector(1 downto 0);
         m_enable: in std_logic;
         m_din:in std_logic_vector(n-1 downto 0);
         m_dout:out std_logic_vector(n-1 downto 0);
@@ -79,23 +82,14 @@ type my_state is
     , s_init_prime
     , s_init_a
     , s_init_b
-    , s_add_load_x1
-    , s_add_load_y1
-    , s_add_load_z1
-    , s_add_load_x2
-    , s_add_load_y2
-    , s_add_load_z2
+    , s_init_x1
+    , s_init_y1
+    , s_init_z1
+    , s_init_x2
+    , s_init_y2
+    , s_init_z2
     , s_add_exec
-    , s_add_store_x3
-    , s_add_store_y3
-    , s_add_store_z3
-    , s_double_load_x1
-    , s_double_load_y1
-    , s_double_load_z1
     , s_double_exec
-    , s_double_store_x3
-    , s_double_store_y3
-    , s_double_store_z3
     , s_write_results
     );
 signal state: my_state := s_comp_init;
@@ -103,16 +97,10 @@ signal state: my_state := s_comp_init;
 signal exec_triggered_i: std_logic := '0';
 
 -- Signals to track intermediates.
-signal prime_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal a_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal b_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal scalar_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal r0x_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal r0y_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal r0z_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal r1x_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal r1y_i: std_logic_vector(n-1 downto 0) := (others => '0');
-signal r1z_i: std_logic_vector(n-1 downto 0) := (others => '0');
+signal op_o_i: std_logic_vector(1 downto 0);
+signal op_a_i: std_logic_vector(1 downto 0);
+signal op_b_i: std_logic_vector(1 downto 0);
+
 signal n_i: unsigned(log2n-1 downto 0) := (others => '0');
 
 -- Declare and initialize internal signals to drive the inputs of components
@@ -139,6 +127,9 @@ inst_ecc_add_double: ecc_add_double
         add_double=>point_add_double_i,
         busy=>point_busy_i,
         done=>point_done_i,
+        op_o=>op_o_i,
+        op_a=>op_a_i,
+        op_b=>op_b_i,
         m_enable=>point_m_enable_i,
         m_din=>point_m_din_i,
         m_dout=>point_m_dout_i,
@@ -147,19 +138,13 @@ inst_ecc_add_double: ecc_add_double
     );
 
 FSM_state: process(rst, clk) is
+    variable next_n: unsigned(log2n-1 downto 0);
 begin
     if rst = '1' then
         state <= s_comp_init;
-        prime_i <= (others => '0');
-        a_i <= (others => '0');
-        b_i <= (others => '0');
-        scalar_i <= (others => '0');
-        r0x_i <= (others => '0');
-        r0y_i <= std_logic_vector(to_unsigned(1, r0y_i'length));
-        r0z_i <= (others => '0');
-        r1x_i <= (others => '0');
-        r1y_i <= (others => '0');
-        r1z_i <= (others => '0');
+        op_o_i <= "10";
+        op_a_i <= "00";
+        op_b_i <= "01";
     elsif rising_edge(clk) then
         case state is
             when s_comp_init =>
@@ -170,72 +155,74 @@ begin
             when s_idle =>
                 report "===== S_IDLE =====";
                 if start = '1' then
-                    prime_i <= prime;
-                    a_i <= a;
-                    b_i <= b;
-                    scalar_i <= scalar;
-                    r1x_i <= gx;
-                    r1y_i <= gy;
-                    r1z_i <= gz;
                     n_i <= to_unsigned(n-1, n_i'length);
                     state <= s_init_prime;
                 end if;
             when s_init_prime =>
                 report "===== s_init_prime =====";
-                point_m_din_i <= prime_i;
+                point_m_din_i <= prime;
                 point_m_rw_i <= '1';
                 point_m_address_i <= P_ADS;
                 state <= s_init_a;
             when s_init_a =>
                 report "===== s_init_a =====";
-                point_m_din_i <= a_i;
+                point_m_din_i <= a;
                 point_m_rw_i <= '1';
                 point_m_address_i <= A_ADS;
                 state <= s_init_b;
             when s_init_b =>
                 report "===== s_init_b =====";
-                point_m_din_i <= b_i;
+                point_m_din_i <= b;
                 point_m_rw_i <= '1';
                 point_m_address_i <= B_ADS;
-                state <= s_add_load_x1;
-            when s_add_load_x1 =>
-                report "===== s_add_load_x1 =====";
-                point_m_din_i <= r0x_i;
+                state <= s_init_x1;
+            when s_init_x1 =>
+                report "===== s_init_x1 =====";
+                point_m_din_i <= (others => '0');
                 point_m_rw_i <= '1';
                 point_m_address_i <= X1_ADS;
-                state <= s_add_load_y1;
-            when s_add_load_y1 =>
-                report "===== s_add_load_y1 =====";
-                point_m_din_i <= r0y_i;
+                state <= s_init_y1;
+            when s_init_y1 =>
+                report "===== s_init_y1 =====";
+                point_m_din_i <= std_logic_vector(to_unsigned(1, point_m_din_i'length));
                 point_m_rw_i <= '1';
                 point_m_address_i <= Y1_ADS;
-                state <= s_add_load_z1;
-            when s_add_load_z1 =>
-                report "===== s_add_load_z1 =====";
-                point_m_din_i <= r0z_i;
+                state <= s_init_z1;
+            when s_init_z1 =>
+                report "===== s_init_z1 =====";
+                point_m_din_i <= (others => '0');
                 point_m_rw_i <= '1';
                 point_m_address_i <= Z1_ADS;
-                state <= s_add_load_x2;
-            when s_add_load_x2 =>
-                report "===== s_add_load_x2 =====";
-                point_m_din_i <= r1x_i;
+                state <= s_init_x2;
+            when s_init_x2 =>
+                report "===== s_init_x2 =====";
+                point_m_din_i <= gx;
                 point_m_rw_i <= '1';
                 point_m_address_i <= X2_ADS;
-                state <= s_add_load_y2;
-            when s_add_load_y2 =>
-                report "===== s_add_load_y2 =====";
-                point_m_din_i <= r1y_i;
+                state <= s_init_y2;
+            when s_init_y2 =>
+                report "===== s_init_y2 =====";
+                point_m_din_i <= gy;
                 point_m_rw_i <= '1';
                 point_m_address_i <= Y2_ADS;
-                state <= s_add_load_z2;
-            when s_add_load_z2 =>
-                report "===== s_add_load_z2 =====";
-                point_m_din_i <= r1z_i;
+                state <= s_init_z2;
+            when s_init_z2 =>
+                report "===== s_init_z2 =====";
+                point_m_din_i <= gz;
                 point_m_rw_i <= '1';
                 point_m_address_i <= Z2_ADS;
                 state <= s_add_exec;
-            when s_add_exec =>
                 report "===== s_add_exec =====";
+                if scalar(to_integer(n_i)) = '1' then
+                    op_o_i <= "00";
+                    op_a_i <= "00";
+                    op_b_i <= "01";
+                else
+                    op_o_i <= "01";
+                    op_a_i <= "00";
+                    op_b_i <= "01";
+                end if;
+            when s_add_exec =>
                 if exec_triggered_i = '0' then
                     exec_triggered_i <= '1';
                     point_start_i <= '1';
@@ -246,78 +233,19 @@ begin
                 else
                     point_start_i <= '0';
                     exec_triggered_i <= '0';
-                    state <= s_add_store_x3;
-                    point_m_rw_i <= '0';
-                    point_m_address_i <= X3_ADS;
+                    state <= s_double_exec;
+                    report "===== s_double_exec =====";
+                    if scalar(to_integer(n_i)) = '1' then
+                        op_o_i <= "01";
+                        op_a_i <= "01";
+                        op_b_i <= "00";
+                    else
+                        op_o_i <= "00";
+                        op_a_i <= "00";
+                        op_b_i <= "01";
+                    end if;
                 end if;
-            when s_add_store_x3 =>
-                report "===== s_add_store_x3 ====";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    r0x_i <= point_m_dout_i;
-                else
-                    r1x_i <= point_m_dout_i;
-                end if;
-                point_m_rw_i <= '0';
-                point_m_address_i <= Y3_ADS;
-                state <= s_add_store_y3;
-            when s_add_store_y3 =>
-                report "===== s_add_store_y3 ====";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    r0y_i <= point_m_dout_i;
-                else
-                    r1y_i <= point_m_dout_i;
-                end if;
-                point_m_rw_i <= '0';
-                point_m_address_i <= Z3_ADS;
-                state <= s_add_store_z3;
-            when s_add_store_z3 =>
-                report "===== s_add_store_z3 ====";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    report "point add bit 1 " & to_string(n_i) & " x: " & to_string(r0x_i) & ", y: " & to_string(r0y_i) & ", z: " & to_string(point_m_dout_i);
-                    r0z_i <= point_m_dout_i;
-                else
-                    report "point add bit 0 " & to_string(n_i) & " x: " & to_string(r1x_i) & ", y: " & to_string(r1y_i) & ", z: " & to_string(point_m_dout_i);
-                    r1z_i <= point_m_dout_i;
-                end if;
-                state <= s_double_load_x1;
-            when s_double_load_x1 =>
-                report "===== s_double_load_x1 ==";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    point_m_din_i <= r1x_i;
-                else
-                    point_m_din_i <= r0x_i;
-                end if;
-                point_m_rw_i <= '1';
-                point_m_address_i <= X1_ADS;
-                state <= s_double_load_y1;
-            when s_double_load_y1 =>
-                report "===== s_double_load_y1 ==";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    point_m_din_i <= r1y_i;
-                else
-                    point_m_din_i <= r0y_i;
-                end if;
-                point_m_rw_i <= '1';
-                point_m_address_i <= Y1_ADS;
-                state <= s_double_load_z1;
-            when s_double_load_z1 =>
-                report "===== s_double_load_z1 ==";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    point_m_din_i <= r1z_i;
-                else
-                    point_m_din_i <= r0z_i;
-                end if;
-                point_m_rw_i <= '1';
-                point_m_address_i <= Z1_ADS;
-                state <= s_double_exec;
             when s_double_exec =>
-                report "===== s_double_exec =====";
                 if exec_triggered_i = '0' then
                     exec_triggered_i <= '1';
                     point_start_i <= '1';
@@ -326,60 +254,31 @@ begin
                     point_start_i <= '0';
                     exec_triggered_i <= '1';
                 else
+                    report "===== s_add_exec =====";
                     point_start_i <= '0';
                     exec_triggered_i <= '0';
 
-                    state <= s_double_store_x3;
-                    point_m_rw_i <= '0';
-                    point_m_address_i <= X3_ADS;
-                end if;
-            when s_double_store_x3 =>
-                report "===== s_double_store_x3 =====";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    r1x_i <= point_m_dout_i;
-                else
-                    r0x_i <= point_m_dout_i;
-                end if;
-                point_m_rw_i <= '0';
-                point_m_address_i <= Y3_ADS;
-                state <= s_double_store_y3;
-            when s_double_store_y3 =>
-                report "===== s_double_store_y3 =====";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    r1y_i <= point_m_dout_i;
-                else
-                    r0y_i <= point_m_dout_i;
-                end if;
-                point_m_rw_i <= '0';
-                point_m_address_i <= Z3_ADS;
-                state <= s_double_store_z3;
-            when s_double_store_z3 =>
-                report "===== s_double_store_z3 =====";
-                report "point_m_dout_i: " & to_string(point_m_dout_i);
-                if scalar_i(to_integer(n_i)) = '1' then
-                    report "point doubling bit 1 " & to_string(n_i) & " x: " & to_string(r1x_i) & ", y: " & to_string(r1y_i) & ", z: " & to_string(point_m_dout_i);
-                    r1z_i <= point_m_dout_i;
-                else
-                    report "point doubling bit 0 " & to_string(n_i) & " x: " & to_string(r0x_i) & ", y: " & to_string(r0y_i) & ", z: " & to_string(point_m_dout_i);
-                    r0z_i <= point_m_dout_i;
-                end if;
-                if n_i = to_unsigned(0, n_i'length) then
-                    state <= s_write_results;
-                else
-                    n_i <= n_i - to_unsigned(1, n_i'length);
-                    state <= s_add_load_x1;
+                    next_n := n_i - to_unsigned(1, n_i'length);
+                    
+                    if n_i = to_unsigned(0, n_i'length) then
+                        state <= s_write_results;
+                    elsif scalar(to_integer(next_n)) = '1' then
+                        op_o_i <= "00";
+                        op_a_i <= "00";
+                        op_b_i <= "01";
+                        n_i <= next_n;
+                        state <= s_add_exec;
+                    else
+                        op_o_i <= "01";
+                        op_a_i <= "00";
+                        op_b_i <= "01";
+                        n_i <= next_n;
+                        state <= s_add_exec;
+                    end if;
                 end if;
             when s_write_results =>
                 report "===== S_WRITE_RESULTS =====";
                 state <= s_idle;
-                report "result x: " & to_string(r0x_i);
-                report "result y: " & to_string(r0y_i);
-                report "result z: " & to_string(r0z_i);
-                sgx <= r0x_i;
-                sgy <= r0y_i;
-                sgz <= r0z_i;
         end case;
     end if;
 end process;
@@ -391,17 +290,13 @@ begin
             when s_comp_init =>
                 point_m_enable_i <= '0';
             when s_idle =>
-                point_m_enable_i <= '1';
+                point_m_enable_i <= '0';
             when s_init_prime | s_init_a | s_init_b 
-                | s_add_load_x1 | s_add_load_y1 | s_add_load_z1
-                | s_add_load_x2 | s_add_load_y2 | s_add_load_z2
-                | s_double_load_x1 | s_double_load_y1 | s_double_load_z1 =>
-                point_m_enable_i <= '1';
-            when s_add_store_x3 | s_add_store_y3 | s_add_store_z3
-                | s_double_store_x3 | s_double_store_y3 | s_double_store_z3 =>
+                 | s_init_x1 | s_init_y1 | s_init_z1
+                 | s_init_x2 | s_init_y2 | s_init_z2 =>
                 point_m_enable_i <= '1';
             when s_add_exec | s_double_exec =>
-                point_m_enable_i <= '1';
+                point_m_enable_i <= '0';
             when s_write_results =>
                 point_m_enable_i <= '0';
         end case;
@@ -418,16 +313,9 @@ begin
             busy <= '0';
             done <= '0';
         when s_init_prime | s_init_a | s_init_b 
-            | s_add_load_x1 | s_add_load_y1 | s_add_load_z1
-            | s_add_load_x2 | s_add_load_y2 | s_add_load_z2
-            | s_double_load_x1 | s_double_load_y1 | s_double_load_z1 =>
-            busy <= '1';
-            done <= '0';
-        when s_add_store_x3 | s_add_store_y3 | s_add_store_z3
-            | s_double_store_x3 | s_double_store_y3 | s_double_store_z3 =>
-            busy <= '1';
-            done <= '0';
-        when s_add_exec | s_double_exec =>
+             | s_init_x1 | s_init_y1 | s_init_z1
+             | s_init_x2 | s_init_y2 | s_init_z2
+             | s_add_exec | s_double_exec =>
             busy <= '1';
             done <= '0';
         when s_write_results =>

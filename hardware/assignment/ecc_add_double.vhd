@@ -31,6 +31,9 @@ entity ecc_add_double is
         add_double: in std_logic;
         done: out std_logic;
         busy: out std_logic;
+        op_o: in std_logic_vector(1 downto 0);
+        op_a: in std_logic_vector(1 downto 0);
+        op_b: in std_logic_vector(1 downto 0);
         m_enable: in std_logic;
         m_din:in std_logic_vector(n-1 downto 0);
         m_dout:out std_logic_vector(n-1 downto 0);
@@ -156,6 +159,62 @@ constant instructions: INSTR_ARRAY := (
     (ADD_INSTR, Z3_ADS, Z3_ADS, Z3_ADS)
 );
 
+function TRANSLATE_ADDR(addr: std_logic_vector(4 downto 0);
+                        new_o: std_logic_vector(1 downto 0);
+                        new_a: std_logic_vector(1 downto 0);
+                        new_b: std_logic_vector(1 downto 0))
+  return std_logic_vector is
+begin
+    case addr is
+        when X1_ADS => case new_a is
+                            when "01" => return X2_ADS;
+                            when "10" => return X3_ADS;
+                            when others => return addr;
+                        end case;
+        when Y1_ADS => case new_a is
+                            when "01" => return Y2_ADS;
+                            when "10" => return Y3_ADS;
+                            when others => return addr;
+                        end case;
+        when Z1_ADS => case new_a is
+                            when "01" => return Z2_ADS;
+                            when "10" => return Z3_ADS;
+                            when others => return addr;
+                        end case;
+        when X2_ADS => case new_b is
+                            when "00" => return X1_ADS;
+                            when "10" => return X3_ADS;
+                            when others => return addr;
+                        end case;
+        when Y2_ADS => case new_b is
+                            when "00" => return Y1_ADS;
+                            when "10" => return Y3_ADS;
+                            when others => return addr;
+                        end case;
+        when Z2_ADS => case new_b is
+                            when "00" => return Z1_ADS;
+                            when "10" => return Z3_ADS;
+                            when others => return addr;
+                        end case;
+        when X3_ADS => case new_o is
+                            when "00" => return X1_ADS;
+                            when "01" => return X2_ADS;
+                            when others => return addr;
+                        end case;
+        when Y3_ADS => case new_o is
+                            when "00" => return Y1_ADS;
+                            when "01" => return Y2_ADS;
+                            when others => return addr;
+                        end case;
+        when Z3_ADS => case new_o is
+                            when "00" => return Z1_ADS;
+                            when "01" => return Z2_ADS;
+                            when others => return addr;
+                        end case;
+        when others => return addr;
+    end case;
+end TRANSLATE_ADDR;
+
 -- declare components
 component ecc_base is
     generic(
@@ -197,6 +256,10 @@ signal m_instr_offset_i: unsigned(INSTR_ADS-1 downto 0);
 signal m_instr_data_i: std_logic_vector(INSTR_WIDTH-1 downto 0);
 
 signal b_tripled: std_logic := '0';
+
+signal op_a_i: std_logic_vector(1 downto 0);
+signal op_b_i: std_logic_vector(1 downto 0);
+signal op_o_i: std_logic_vector(1 downto 0);
 
 -- declare and initialize internal signals to drive the inputs of ecc_base
 signal base_start_i: std_logic := '0';
@@ -241,6 +304,9 @@ FSM_state: process(rst, clk) is
 begin
     if rst = '1' then
         base_command_i <= "110";
+        op_a_i <= (others => '0');
+        op_b_i <= (others => '0');
+        op_o_i <= (others => '0');
         base_oper_o_i <= (others => '0');
         base_oper_a_i <= (others => '0');
         base_oper_b_i <= (others => '0');
@@ -271,6 +337,9 @@ begin
                     b_tripled <= '0';
                 end if;
                 if start = '1' then
+                    op_a_i <= op_a;
+                    op_b_i <= op_b;
+                    op_o_i <= op_o;
                     if add_double = '1' then
                         m_instr_offset_i <= to_unsigned(DBL_INSTR_START, m_instr_end_i'length);
                         m_instr_end_i <= to_unsigned(DBL_INSTR_END, m_instr_end_i'length);
@@ -337,9 +406,9 @@ begin
                     end if;
                 end if;
                 base_command_i <= '0' & m_instr_data_i(16 downto 15);
-                base_oper_o_i <= m_instr_data_i(14 downto 10);
-                base_oper_a_i <= m_instr_data_i(9 downto 5);
-                base_oper_b_i <= m_instr_data_i(4 downto 0);
+                base_oper_o_i <= TRANSLATE_ADDR(m_instr_data_i(14 downto 10), op_o_i, op_a_i, op_b_i);
+                base_oper_a_i <= TRANSLATE_ADDR(m_instr_data_i(9 downto 5), op_o_i, op_a_i, op_b_i);
+                base_oper_b_i <= TRANSLATE_ADDR(m_instr_data_i(4 downto 0), op_o_i, op_a_i, op_b_i);
             when s_write_results =>
                 m_instr_data_i <= instructions(0);
                 m_instr_offset_i <= to_unsigned(0, m_instr_offset_i'length);

@@ -144,23 +144,23 @@ def scalar_mult(p, X1, Y1, Z1, s, a, b3):
   for i in range(n-1, -1, -1):
     if s & (1 << i) > 0:
       (x,y,z) = point_addition(p, r0_x, r0_y, r0_z, r1_x, r1_y, r1_z, a, b3)
-      print(f"point add bit 1 {i} x: {x:08b}, y: {y:08b}, z: {z:08b}")
+      print(f"point add bit 1 {i} X1: {x:08b}, Y1: {y:08b}, Z1: {z:08b}")
       r0_x = x
       r0_y = y
       r0_z = z
       (x,y,z) = point_doubling(p, r1_x, r1_y, r1_z, a, b3)
-      print(f"point doubling bit 1 {i} x: {x:08b}, y: {y:08b}, z: {z:08b}")
+      print(f"point doubling bit 1 {i} X2: {x:08b}, Y2: {y:08b}, Z2: {z:08b}")
       r1_x = x
       r1_y = y
       r1_z = z
     else:
       (x,y,z) = point_addition(p, r0_x, r0_y, r0_z, r1_x, r1_y, r1_z, a, b3)
-      print(f"point add bit 0 {i} x: {x:08b}, y: {y:08b}, z: {z:08b}")
+      print(f"point add bit 0 {i} X2: {x:08b}, Y2: {y:08b}, Z2: {z:08b}")
       r1_x = x
       r1_y = y
       r1_z = z
       (x,y,z) = point_doubling(p, r0_x, r0_y, r0_z, a, b3)
-      print(f"point doubling bit 0 {i} x: {x:08b}, y: {y:08b}, z: {z:08b}")
+      print(f"point doubling bit 0 {i} X1: {x:08b}, Y1: {y:08b}, Z1: {z:08b}")
       r0_x = x
       r0_y = y
       r0_z = z
@@ -169,14 +169,25 @@ def scalar_mult(p, X1, Y1, Z1, s, a, b3):
 
 
 if __name__ == "__main__":
-  p = 0x7F
-  a = 0x7C
-  b = 0x05
+  p = 0xffffffff00000001000000000000000000000000ffffffffffffffffffffffff
+  a = 0xffffffff00000001000000000000000000000000fffffffffffffffffffffffc
+  b = 0x5ac635d8aa3a93e7b3ebbd55769886bc651d06b0cc53b0f63bce3c3e27d2604b
+  b3 = 3 * b
+  x = 0x771237aee432c1de1760a14d5ef2dc2bed90151a4512254b3a8166b46d8d03d3
+  y = 0x24a827e6110102663b61e20b703294289f517c602bcfbdb28eba3d358ef04207
+  z = 0x67e35ea00df06783de49f09bb1d0bfc6d32246304390fa40f9f0153f92fbd519
+  (x2,y2,z2) = point_doubling(p, x, y, z, a,b3)
+  
+  print(f"x: {x2:256b}, y: {y2:256b}, z: {z2:256b}")
 
-  g_x = 0x31
-  g_y = 0x0a
-  g_z = 0x0f
+  # p = 0x7F
+  # a = 0x7C
+  # b = 0x05
 
-  s = 0x45
+  # g_x = 0x31
+  # g_y = 0x0a
+  # g_z = 0x0f
 
-  (X3, Y3, Z3) = scalar_mult(p, g_x, g_y, g_z, s, a, 3 * b)
+  # s = 0xC0
+
+  # (X3, Y3, Z3) = scalar_mult(p, g_x, g_y, g_z, s, a, 3 * b)

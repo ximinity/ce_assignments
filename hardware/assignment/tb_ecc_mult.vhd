@@ -26,7 +26,7 @@ constant ecc_prime: std_logic_vector(n-1 downto 0) := X"7F";
 constant ecc_a: std_logic_vector(n-1 downto 0) := X"7C";
 constant ecc_b: std_logic_vector(n-1 downto 0) := X"05";
 
-constant ecc_s: std_logic_vector(n-1 downto 0) := X"45";
+constant ecc_s: std_logic_vector(n-1 downto 0) := X"C0";
 
 constant ecc_g_x: std_logic_vector(n-1 downto 0) := X"31";
 constant ecc_g_y: std_logic_vector(n-1 downto 0) := X"0a";
