@@ -151,44 +151,32 @@ begin
     elsif rising_edge(clk) then
         case state is
             when s_comp_init =>
-                report "===== S_COMP_INIT =====";
                 if point_busy_i = '0' then
                     state <= s_idle;
                 end if;
             when s_idle =>
-                report "===== S_IDLE =====";
                 if start = '1' then
                     n_i <= to_unsigned(n-1, n_i'length);
                     state <= s_init_prime;
                 end if;
             when s_init_prime =>
-                report "===== s_init_prime =====";
                 state <= s_init_a;
             when s_init_a =>
-                report "===== s_init_a =====";
                 state <= s_init_b;
             when s_init_b =>
-                report "===== s_init_b =====";
                 state <= s_init_x1;
             when s_init_x1 =>
-                report "===== s_init_x1 =====";
                 state <= s_init_y1;
             when s_init_y1 =>
-                report "===== s_init_y1 =====";
                 state <= s_init_z1;
             when s_init_z1 =>
-                report "===== s_init_z1 =====";
                 state <= s_init_x2;
             when s_init_x2 =>
-                report "===== s_init_x2 =====";
                 state <= s_init_y2;
             when s_init_y2 =>
-                report "===== s_init_y2 =====";
                 state <= s_init_z2;
             when s_init_z2 =>
-                report "===== s_init_z2 =====";
                 state <= s_add_exec;
-                report "===== s_add_exec =====";
                 if scalar(to_integer(n_i)) = '1' then
                     op_o_i <= "00";
                     op_a_i <= "00";
@@ -210,7 +198,6 @@ begin
                     point_start_i <= '0';
                     exec_triggered_i <= '0';
                     state <= s_double_exec;
-                    report "===== s_double_exec =====";
                     if scalar(to_integer(n_i)) = '1' then
                         op_o_i <= "01";
                         op_a_i <= "01";
@@ -230,7 +217,6 @@ begin
                     point_start_i <= '0';
                     exec_triggered_i <= '1';
                 else
-                    report "===== s_add_exec =====";
                     point_start_i <= '0';
                     exec_triggered_i <= '0';
 
@@ -255,16 +241,12 @@ begin
             when s_result_r0x =>
                 state <= s_result_r0y;
             when s_result_r0y =>
-                report "sgx: " & to_string(point_m_dout_i);
                 sgx <= point_m_dout_i;
                 state <= s_result_r0z;
             when s_result_r0z =>
-                report "sgy: " & to_string(point_m_dout_i);
                 sgy <= point_m_dout_i;
                 state <= s_write_results;
             when s_write_results =>
-                report "===== S_WRITE_RESULTS =====";
-                report "sgz: " & to_string(point_m_dout_i);
                 sgz <= point_m_dout_i;
                 state <= s_idle;
         end case;

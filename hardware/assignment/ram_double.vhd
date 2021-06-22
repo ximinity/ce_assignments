@@ -51,13 +51,6 @@ begin
 process(clk)
     begin
         if (rising_edge(clk)) then
-            report "X1: " & to_string(memory_ram(3));
-            report "Y1: " & to_string(memory_ram(4));
-            report "Z1: " & to_string(memory_ram(5));
-            report "X2: " & to_string(memory_ram(6));
-            report "Y2: " & to_string(memory_ram(7));
-            report "Z2: " & to_string(memory_ram(8));
-
             if(enable = '1') then
                 dout_a <= memory_ram(to_integer(to_01(unsigned(address_a))));
                 dout_b <= memory_ram(to_integer(to_01(unsigned(address_b))));
