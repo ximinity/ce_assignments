@@ -61,107 +61,107 @@ constant C3_ADS: std_logic_vector(4 downto 0) := "10010";
 type INSTR_ARRAY is array (0 to DBL_INSTR_END) of std_logic_vector(INSTR_WIDTH-1 downto 0);
 constant instructions: INSTR_ARRAY := (
     -- Point addition
-    (MUL_INSTR, t0_ADS, X1_ADS, X2_ADS),
-    (MUL_INSTR, t1_ADS, Y1_ADS, Y2_ADS),
-    (MUL_INSTR, t2_ADS, Z1_ADS, Z2_ADS),
+    std_logic_vector'(MUL_INSTR & t0_ADS & X1_ADS & X2_ADS),
+    std_logic_vector'(MUL_INSTR & t1_ADS & Y1_ADS & Y2_ADS),
+    std_logic_vector'(MUL_INSTR & t2_ADS & Z1_ADS & Z2_ADS),
 
-    (ADD_INSTR, t3_ADS, X1_ADS, Y1_ADS),
-    (ADD_INSTR, t4_ADS, X2_ADS, Y2_ADS),
-    (MUL_INSTR, t3_ADS, t3_ADS, t4_ADS),
+    std_logic_vector'(ADD_INSTR & t3_ADS & X1_ADS & Y1_ADS),
+    std_logic_vector'(ADD_INSTR & t4_ADS & X2_ADS & Y2_ADS),
+    std_logic_vector'(MUL_INSTR & t3_ADS & t3_ADS & t4_ADS),
 
-    (ADD_INSTR, t4_ADS, t0_ADS, t1_ADS),
-    (SUB_INSTR, t3_ADS, t3_ADS, t4_ADS),
-    (ADD_INSTR, t4_ADS, X1_ADS, Z1_ADS),
+    std_logic_vector'(ADD_INSTR & t4_ADS & t0_ADS & t1_ADS),
+    std_logic_vector'(SUB_INSTR & t3_ADS & t3_ADS & t4_ADS),
+    std_logic_vector'(ADD_INSTR & t4_ADS & X1_ADS & Z1_ADS),
 
-    (ADD_INSTR, t5_ADS, X2_ADS, Z2_ADS),
-    (MUL_INSTR, t4_ADS, t4_ADS, t5_ADS),
-    (ADD_INSTR, t5_ADS, t0_ADS, t2_ADS),
+    std_logic_vector'(ADD_INSTR & t5_ADS & X2_ADS & Z2_ADS),
+    std_logic_vector'(MUL_INSTR & t4_ADS & t4_ADS & t5_ADS),
+    std_logic_vector'(ADD_INSTR & t5_ADS & t0_ADS & t2_ADS),
 
-    (SUB_INSTR, t4_ADS, t4_ADS, t5_ADS),
-    (ADD_INSTR, t5_ADS, Y1_ADS, Z1_ADS),
-    (ADD_INSTR, X3_ADS, Y2_ADS, Z2_ADS),
+    std_logic_vector'(SUB_INSTR & t4_ADS & t4_ADS & t5_ADS),
+    std_logic_vector'(ADD_INSTR & t5_ADS & Y1_ADS & Z1_ADS),
+    std_logic_vector'(ADD_INSTR & X3_ADS & Y2_ADS & Z2_ADS),
 
-    (MUL_INSTR, t5_ADS, t5_ADS, X3_ADS),
-    (ADD_INSTR, X3_ADS, t1_ADS, t2_ADS),
-    (SUB_INSTR, t5_ADS, t5_ADS, X3_ADS),
+    std_logic_vector'(MUL_INSTR & t5_ADS & t5_ADS & X3_ADS),
+    std_logic_vector'(ADD_INSTR & X3_ADS & t1_ADS & t2_ADS),
+    std_logic_vector'(SUB_INSTR & t5_ADS & t5_ADS & X3_ADS),
 
-    (MUL_INSTR, Z3_ADS,  A_ADS, t4_ADS),
-    (MUL_INSTR, X3_ADS,  B_ADS, t2_ADS),
-    (ADD_INSTR, Z3_ADS, X3_ADS, Z3_ADS),
+    std_logic_vector'(MUL_INSTR & Z3_ADS &  A_ADS & t4_ADS),
+    std_logic_vector'(MUL_INSTR & X3_ADS &  B_ADS & t2_ADS),
+    std_logic_vector'(ADD_INSTR & Z3_ADS & X3_ADS & Z3_ADS),
 
-    (SUB_INSTR, X3_ADS, t1_ADS, Z3_ADS),
-    (ADD_INSTR, Z3_ADS, t1_ADS, Z3_ADS),
-    (MUL_INSTR, Y3_ADS, X3_ADS, Z3_ADS),
+    std_logic_vector'(SUB_INSTR & X3_ADS & t1_ADS & Z3_ADS),
+    std_logic_vector'(ADD_INSTR & Z3_ADS & t1_ADS & Z3_ADS),
+    std_logic_vector'(MUL_INSTR & Y3_ADS & X3_ADS & Z3_ADS),
 
-    (ADD_INSTR, t1_ADS, t0_ADS, t0_ADS),
-    (ADD_INSTR, t1_ADS, t1_ADS, t0_ADS),
-    (MUL_INSTR, t2_ADS,  A_ADS, t2_ADS),
+    std_logic_vector'(ADD_INSTR & t1_ADS & t0_ADS & t0_ADS),
+    std_logic_vector'(ADD_INSTR & t1_ADS & t1_ADS & t0_ADS),
+    std_logic_vector'(MUL_INSTR & t2_ADS &  A_ADS & t2_ADS),
 
-    (MUL_INSTR, t4_ADS,  B_ADS, t4_ADS),
-    (ADD_INSTR, t1_ADS, t1_ADS, t2_ADS),
-    (SUB_INSTR, t2_ADS, t0_ADS, t2_ADS),
+    std_logic_vector'(MUL_INSTR & t4_ADS &  B_ADS & t4_ADS),
+    std_logic_vector'(ADD_INSTR & t1_ADS & t1_ADS & t2_ADS),
+    std_logic_vector'(SUB_INSTR & t2_ADS & t0_ADS & t2_ADS),
 
-    (MUL_INSTR, t2_ADS,  A_ADS, t2_ADS),
-    (ADD_INSTR, t4_ADS, t4_ADS, t2_ADS),
-    (MUL_INSTR, t0_ADS, t1_ADS, t4_ADS),
+    std_logic_vector'(MUL_INSTR & t2_ADS &  A_ADS & t2_ADS),
+    std_logic_vector'(ADD_INSTR & t4_ADS & t4_ADS & t2_ADS),
+    std_logic_vector'(MUL_INSTR & t0_ADS & t1_ADS & t4_ADS),
 
-    (ADD_INSTR, Y3_ADS, Y3_ADS, t0_ADS),
-    (MUL_INSTR, t0_ADS, t5_ADS, t4_ADS),
-    (MUL_INSTR, X3_ADS, t3_ADS, X3_ADS),
+    std_logic_vector'(ADD_INSTR & Y3_ADS & Y3_ADS & t0_ADS),
+    std_logic_vector'(MUL_INSTR & t0_ADS & t5_ADS & t4_ADS),
+    std_logic_vector'(MUL_INSTR & X3_ADS & t3_ADS & X3_ADS),
 
-    (SUB_INSTR, X3_ADS, X3_ADS, t0_ADS),
-    (MUL_INSTR, t0_ADS, t3_ADS, t1_ADS),
-    (MUL_INSTR, Z3_ADS, t5_ADS, Z3_ADS),
+    std_logic_vector'(SUB_INSTR & X3_ADS & X3_ADS & t0_ADS),
+    std_logic_vector'(MUL_INSTR & t0_ADS & t3_ADS & t1_ADS),
+    std_logic_vector'(MUL_INSTR & Z3_ADS & t5_ADS & Z3_ADS),
 
-    (ADD_INSTR, Z3_ADS, Z3_ADS, t0_ADS),
-    
+    std_logic_vector'(ADD_INSTR & Z3_ADS & Z3_ADS & t0_ADS),
+
     -- Point doubling
-    (MUL_INSTR, t0_ADS, X1_ADS, X1_ADS),
-    (MUL_INSTR, t1_ADS, Y1_ADS, Y1_ADS),
-    (MUL_INSTR, t2_ADS, Z1_ADS, Z1_ADS),
+    std_logic_vector'(MUL_INSTR & t0_ADS & X1_ADS & X1_ADS),
+    std_logic_vector'(MUL_INSTR & t1_ADS & Y1_ADS & Y1_ADS),
+    std_logic_vector'(MUL_INSTR & t2_ADS & Z1_ADS & Z1_ADS),
     -- We store use an additional
     -- temporary here because points
     -- can overlap for us
-    (MUL_INSTR, t4_ADS, Y1_ADS, Z1_ADS),
+    std_logic_vector'(MUL_INSTR & t4_ADS & Y1_ADS & Z1_ADS),
 
-    (MUL_INSTR, t3_ADS, X1_ADS, Y1_ADS),
-    (ADD_INSTR, t3_ADS, t3_ADS, t3_ADS),
-    (MUL_INSTR, Z3_ADS, X1_ADS, Z1_ADS),
+    std_logic_vector'(MUL_INSTR & t3_ADS & X1_ADS & Y1_ADS),
+    std_logic_vector'(ADD_INSTR & t3_ADS & t3_ADS & t3_ADS),
+    std_logic_vector'(MUL_INSTR & Z3_ADS & X1_ADS & Z1_ADS),
 
-    (ADD_INSTR, Z3_ADS, Z3_ADS, Z3_ADS),
-    (MUL_INSTR, X3_ADS,  A_ADS, Z3_ADS),
-    (MUL_INSTR, Y3_ADS,  B_ADS, t2_ADS),
+    std_logic_vector'(ADD_INSTR & Z3_ADS & Z3_ADS & Z3_ADS),
+    std_logic_vector'(MUL_INSTR & X3_ADS &  A_ADS & Z3_ADS),
+    std_logic_vector'(MUL_INSTR & Y3_ADS &  B_ADS & t2_ADS),
 
-    (ADD_INSTR, Y3_ADS, X3_ADS, Y3_ADS),
-    (SUB_INSTR, X3_ADS, t1_ADS, Y3_ADS),
-    (ADD_INSTR, Y3_ADS, t1_ADS, Y3_ADS),
+    std_logic_vector'(ADD_INSTR & Y3_ADS & X3_ADS & Y3_ADS),
+    std_logic_vector'(SUB_INSTR & X3_ADS & t1_ADS & Y3_ADS),
+    std_logic_vector'(ADD_INSTR & Y3_ADS & t1_ADS & Y3_ADS),
 
-    (MUL_INSTR, Y3_ADS, X3_ADS, Y3_ADS),
-    (MUL_INSTR, X3_ADS, t3_ADS, X3_ADS),
-    (MUL_INSTR, Z3_ADS,  B_ADS, Z3_ADS),
+    std_logic_vector'(MUL_INSTR & Y3_ADS & X3_ADS & Y3_ADS),
+    std_logic_vector'(MUL_INSTR & X3_ADS & t3_ADS & X3_ADS),
+    std_logic_vector'(MUL_INSTR & Z3_ADS &  B_ADS & Z3_ADS),
 
-    (MUL_INSTR, t2_ADS,  A_ADS, t2_ADS),
-    (SUB_INSTR, t3_ADS, t0_ADS, t2_ADS),
-    (MUL_INSTR, t3_ADS,  A_ADS, t3_ADS),
+    std_logic_vector'(MUL_INSTR & t2_ADS &  A_ADS & t2_ADS),
+    std_logic_vector'(SUB_INSTR & t3_ADS & t0_ADS & t2_ADS),
+    std_logic_vector'(MUL_INSTR & t3_ADS &  A_ADS & t3_ADS),
 
-    (ADD_INSTR, t3_ADS, t3_ADS, Z3_ADS),
-    (ADD_INSTR, Z3_ADS, t0_ADS, t0_ADS),
-    (ADD_INSTR, t0_ADS, Z3_ADS, t0_ADS),
+    std_logic_vector'(ADD_INSTR & t3_ADS & t3_ADS & Z3_ADS),
+    std_logic_vector'(ADD_INSTR & Z3_ADS & t0_ADS & t0_ADS),
+    std_logic_vector'(ADD_INSTR & t0_ADS & Z3_ADS & t0_ADS),
 
-    (ADD_INSTR, t0_ADS, t0_ADS, t2_ADS),
-    (MUL_INSTR, t0_ADS, t0_ADS, t3_ADS),
-    (ADD_INSTR, Y3_ADS, Y3_ADS, t0_ADS),
+    std_logic_vector'(ADD_INSTR & t0_ADS & t0_ADS & t2_ADS),
+    std_logic_vector'(MUL_INSTR & t0_ADS & t0_ADS & t3_ADS),
+    std_logic_vector'(ADD_INSTR & Y3_ADS & Y3_ADS & t0_ADS),
 
     -- This has now been done earlier
-    -- (MUL_INSTR, t2_ADS, Y1_ADS, Z1_ADS),
-    (ADD_INSTR, t2_ADS, t4_ADS, t4_ADS),
-    (MUL_INSTR, t0_ADS, t2_ADS, t3_ADS),
+    -- MUL_INSTR & t2_ADS & Y1_ADS & Z1_ADS),
+    std_logic_vector'(ADD_INSTR & t2_ADS & t4_ADS & t4_ADS),
+    std_logic_vector'(MUL_INSTR & t0_ADS & t2_ADS & t3_ADS),
 
-    (SUB_INSTR, X3_ADS, X3_ADS, t0_ADS),
-    (MUL_INSTR, Z3_ADS, t2_ADS, t1_ADS),
-    (ADD_INSTR, Z3_ADS, Z3_ADS, Z3_ADS),
+    std_logic_vector'(SUB_INSTR & X3_ADS & X3_ADS & t0_ADS),
+    std_logic_vector'(MUL_INSTR & Z3_ADS & t2_ADS & t1_ADS),
+    std_logic_vector'(ADD_INSTR & Z3_ADS & Z3_ADS & Z3_ADS),
 
-    (ADD_INSTR, Z3_ADS, Z3_ADS, Z3_ADS)
+    std_logic_vector'(ADD_INSTR & Z3_ADS & Z3_ADS & Z3_ADS)
 );
 
 function TRANSLATE_ADDR(addr: std_logic_vector(4 downto 0);

@@ -152,7 +152,7 @@ end process;
 
 -- Wire up memory module signals
 m_dout <= a;
-mem_proc: process(free, rw, m_enable, m_rw, m_din, m_address, product, reg_oper_o, reg_oper_a)
+mem_proc: process(free, rw, m_enable, m_rw, m_din, m_address, enable, product, reg_oper_o, reg_oper_a)
 begin
     if free = '1' then
         m_enable_i <= m_enable;
