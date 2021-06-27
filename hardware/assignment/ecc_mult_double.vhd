@@ -90,13 +90,19 @@ type my_state is
     , s_init_y2
     , s_init_z2
     , s_add_double_exec
-    , s_sync_adder_doubler_rx
-    , s_sync_adder_doubler_ry
-    , s_sync_adder_doubler_rz
+    , s_sync_adder_doubler_rx0
+    , s_sync_adder_doubler_rx1
+    , s_sync_adder_doubler_ry0
+    , s_sync_adder_doubler_ry1
+    , s_sync_adder_doubler_rz0
+    , s_sync_adder_doubler_rz1
     , s_sync_adder_doubler_rz2
-    , s_sync_doubler_adder_rx
-    , s_sync_doubler_adder_ry
-    , s_sync_doubler_adder_rz
+    , s_sync_doubler_adder_rx0
+    , s_sync_doubler_adder_rx1
+    , s_sync_doubler_adder_ry0
+    , s_sync_doubler_adder_ry1
+    , s_sync_doubler_adder_rz0
+    , s_sync_doubler_adder_rz1
     , s_sync_doubler_adder_rz2
     , s_result_r0x
     , s_result_r0y
@@ -196,42 +202,31 @@ begin
     elsif rising_edge(clk) then
         case state is
             when s_comp_init =>
-                report "======= s_comp_init =======";
                 if point_busy_i_adder = '0' and point_busy_i_doubler = '0' then
                     state <= s_idle;
                 end if;
             when s_idle =>
-                report "======= s_idle =======";
                 if start = '1' then
                     n_i <= to_unsigned(n-1, n_i'length);
                     state <= s_init_prime;
                 end if;
             when s_init_prime =>
-                report "======= s_init_prime =======";
                 state <= s_init_a;
             when s_init_a =>
-                report "======= s_init_a =======";
                 state <= s_init_b;
             when s_init_b =>
-                report "======= s_init_b =======";
                 state <= s_init_x1;
             when s_init_x1 =>
-                report "======= s_init_x1 =======";
                 state <= s_init_y1;
             when s_init_y1 =>
-                report "======= s_init_y1 =======";
                 state <= s_init_z1;
             when s_init_z1 =>
-                report "======= s_init_z1 =======";
                 state <= s_init_x2;
             when s_init_x2 =>
-                report "======= s_init_x2 =======";
                 state <= s_init_y2;
             when s_init_y2 =>
-                report "======= s_init_y2 =======";
                 state <= s_init_z2;
             when s_init_z2 =>
-                report "======= s_init_z2 =======";
                 state <= s_add_double_exec;
                 if scalar(to_integer(n_i)) = '1' then
                     op_o_i_adder <= "00";
@@ -249,42 +244,45 @@ begin
                     op_b_i_doubler <= "01";
                 end if;
             when s_add_double_exec =>
-                report "======= s_add_double_exec =======";
                 if exec_triggered_i = '0' then
                     exec_triggered_i <= '1';
                     point_start_i <= '1';
-                elsif point_done_i_doubler = '0' then
+                elsif point_done_i_adder = '0' then
                     point_start_i <= '0';
                     exec_triggered_i <= '1';
                 else
                     point_start_i <= '0';
                     exec_triggered_i <= '0';
 
-                    state <= s_sync_adder_doubler_rx;
+                    state <= s_sync_adder_doubler_rx0;
                 end if;
-            when s_sync_adder_doubler_rx =>
-                report "======= s_sync_adder_doubler_rx =======";
-                state <= s_sync_adder_doubler_ry;
-            when s_sync_adder_doubler_ry =>
-                report "======= s_sync_adder_doubler_ry =======";
-                state <= s_sync_adder_doubler_rz;
-            when s_sync_adder_doubler_rz =>
-                report "======= s_sync_adder_doubler_rz =======";
+            when s_sync_adder_doubler_rx0 =>
+                state <= s_sync_adder_doubler_rx1;
+            when s_sync_adder_doubler_rx1 =>
+                state <= s_sync_adder_doubler_ry0;
+            when s_sync_adder_doubler_ry0 =>
+                state <= s_sync_adder_doubler_ry1;
+            when s_sync_adder_doubler_ry1 =>
+                state <= s_sync_adder_doubler_rz0;
+            when s_sync_adder_doubler_rz0 =>
+                state <= s_sync_adder_doubler_rz1;
+            when s_sync_adder_doubler_rz1 =>
                 state <= s_sync_adder_doubler_rz2;
             when s_sync_adder_doubler_rz2 =>
-                report "======= s_sync_adder_doubler_rz2 =======";
-                state <= s_sync_doubler_adder_rx;
-            when s_sync_doubler_adder_rx =>
-                report "======= s_sync_doubler_adder_rx =======";
-                state <= s_sync_doubler_adder_ry;
-            when s_sync_doubler_adder_ry =>
-                report "======= s_sync_doubler_adder_ry =======";
-                state <= s_sync_doubler_adder_rz;
-            when s_sync_doubler_adder_rz =>
-                report "======= s_sync_doubler_adder_rz =======";
+                state <= s_sync_doubler_adder_rx0;
+            when s_sync_doubler_adder_rx0 =>
+                state <= s_sync_doubler_adder_rx1;
+            when s_sync_doubler_adder_rx1 =>
+                state <= s_sync_doubler_adder_ry0;
+            when s_sync_doubler_adder_ry0 =>
+                state <= s_sync_doubler_adder_ry1;
+            when s_sync_doubler_adder_ry1 =>
+                state <= s_sync_doubler_adder_rz0;
+            when s_sync_doubler_adder_rz0 =>
+                state <= s_sync_doubler_adder_rz1;
+            when s_sync_doubler_adder_rz1 =>
                 state <= s_sync_doubler_adder_rz2;
             when s_sync_doubler_adder_rz2 =>
-                report "======= s_sync_doubler_adder_rz2 =======";
                 next_n := n_i - to_unsigned(1, n_i'length);
                 if n_i = to_unsigned(0, n_i'length) then
                     state <= s_result_r0x;
@@ -308,18 +306,14 @@ begin
                     state <= s_add_double_exec;
                 end if;
             when s_result_r0x =>
-                report "======= s_result_r0x =======";
                 state <= s_result_r0y;
             when s_result_r0y =>
-                report "======= s_result_r0y =======";
                 sgx <= point_m_dout_i_adder;
                 state <= s_result_r0z;
             when s_result_r0z =>
-                report "======= s_result_r0z =======";
                 sgy <= point_m_dout_i_adder;
                 state <= s_write_results;
             when s_write_results =>
-                report "======= s_write_results =======";
                 sgz <= point_m_dout_i_adder;
                 state <= s_idle;
         end case;
@@ -437,49 +431,45 @@ begin
             point_m_rw_i_doubler <= '0';
             point_m_address_i_doubler <= (others => '0');
             point_m_enable_i_doubler <= '0';
-        when s_sync_adder_doubler_rx =>
+        when s_sync_adder_doubler_rx0 | s_sync_adder_doubler_rx1 =>
             point_m_din_i_adder <= (others => '0');
             point_m_rw_i_adder <= '0';
             point_m_enable_i_adder <= '1';
             point_m_din_i_doubler <= (others => '0');
             point_m_rw_i_doubler <= '0';
             point_m_enable_i_doubler <= '0';
-            if op_o_i_adder <= "00" then
+            if op_o_i_adder = "00" then
                 point_m_address_i_adder <= X1_ADS;
                 point_m_address_i_doubler <= X1_ADS;
             else
                 point_m_address_i_adder <= X2_ADS;
                 point_m_address_i_doubler <= X2_ADS;
             end if;
-        when s_sync_adder_doubler_ry =>
+        when s_sync_adder_doubler_ry0 | s_sync_adder_doubler_ry1 =>
             point_m_din_i_adder <= (others => '0');
             point_m_rw_i_adder <= '0';
             point_m_enable_i_adder <= '1';
             point_m_din_i_doubler <= point_m_dout_i_adder;
             point_m_rw_i_doubler <= '1';
             point_m_enable_i_doubler <= '1';
-            if op_o_i_adder <= "00" then
-                report "Writing r0x from adder: " & to_string(point_m_dout_i_adder) & ", to doubler r0x";
+            if op_o_i_adder = "00" then
                 point_m_address_i_adder <= Y1_ADS;
                 point_m_address_i_doubler <= X1_ADS;
             else
-                report "Writing r1x from adder: " & to_string(point_m_dout_i_adder) & ", to doubler r1x";
                 point_m_address_i_adder <= Y2_ADS;
                 point_m_address_i_doubler <= X2_ADS;
             end if;
-        when s_sync_adder_doubler_rz =>
+        when s_sync_adder_doubler_rz0 | s_sync_adder_doubler_rz1 =>
             point_m_din_i_adder <= (others => '0');
             point_m_rw_i_adder <= '0';
             point_m_enable_i_adder <= '1';
             point_m_din_i_doubler <= point_m_dout_i_adder;
             point_m_rw_i_doubler <= '1';
             point_m_enable_i_doubler <= '1';
-            if op_o_i_adder <= "00" then
-                report "Writing r0y from adder: " & to_string(point_m_dout_i_adder) & ", to doubler r0y";
+            if op_o_i_adder = "00" then
                 point_m_address_i_adder <= Z1_ADS;
                 point_m_address_i_doubler <= Y1_ADS;
             else
-                report "Writing r1y from adder: " & to_string(point_m_dout_i_adder) & ", to doubler r1y";
                 point_m_address_i_adder <= Z2_ADS;
                 point_m_address_i_doubler <= Y2_ADS;
             end if;
@@ -490,58 +480,52 @@ begin
             point_m_din_i_doubler <= point_m_dout_i_adder;
             point_m_rw_i_doubler <= '1';
             point_m_enable_i_doubler <= '1';
-            if op_o_i_adder <= "00" then
-                report "Writing r0z from adder: " & to_string(point_m_dout_i_adder) & ", to doubler r0z";
+            if op_o_i_adder = "00" then
                 point_m_address_i_adder <= Z1_ADS;
                 point_m_address_i_doubler <= Z1_ADS;
             else
-                report "Writing r1z from adder: " & to_string(point_m_dout_i_adder) & ", to doubler r1z";
                 point_m_address_i_adder <= Z2_ADS;
                 point_m_address_i_doubler <= Z2_ADS;
             end if;
-        when s_sync_doubler_adder_rx =>
+        when s_sync_doubler_adder_rx0 | s_sync_doubler_adder_rx1 =>
             point_m_din_i_adder <= (others => '0');
             point_m_rw_i_adder <= '0';
             point_m_enable_i_adder <= '0';
             point_m_din_i_doubler <= (others => '0');
             point_m_rw_i_doubler <= '0';
             point_m_enable_i_doubler <= '1';
-            if op_o_i_doubler <= "00" then
+            if op_o_i_doubler = "00" then
                 point_m_address_i_adder <= X1_ADS;
                 point_m_address_i_doubler <= X1_ADS;
             else
                 point_m_address_i_adder <= X2_ADS;
                 point_m_address_i_doubler <= X2_ADS;
             end if;
-        when s_sync_doubler_adder_ry =>
+        when s_sync_doubler_adder_ry0 | s_sync_doubler_adder_ry1 =>
             point_m_din_i_adder <= point_m_dout_i_doubler;
             point_m_rw_i_adder <= '1';
             point_m_enable_i_adder <= '1';
             point_m_din_i_doubler <= (others => '0');
             point_m_rw_i_doubler <= '0';
             point_m_enable_i_doubler <= '1';
-            if op_o_i_doubler <= "00" then
-                report "Writing r0x from doubler: " & to_string(point_m_dout_i_doubler) & ", to adder r0x";
+            if op_o_i_doubler = "00" then
                 point_m_address_i_adder <= X1_ADS;
                 point_m_address_i_doubler <= Y1_ADS;
             else
-                report "Writing r1x from doubler: " & to_string(point_m_dout_i_doubler) & ", to adder r1x";
                 point_m_address_i_adder <= X2_ADS;
                 point_m_address_i_doubler <= Y2_ADS;
             end if;
-        when s_sync_doubler_adder_rz =>
+        when s_sync_doubler_adder_rz0 | s_sync_doubler_adder_rz1 =>
             point_m_din_i_adder <= point_m_dout_i_doubler;
             point_m_rw_i_adder <= '1';
             point_m_enable_i_adder <= '1';
             point_m_din_i_doubler <= (others => '0');
             point_m_rw_i_doubler <= '0';
             point_m_enable_i_doubler <= '1';
-            if op_o_i_doubler <= "00" then
-                report "Writing r0y from doubler: " & to_string(point_m_dout_i_doubler) & ", to adder r0y";
+            if op_o_i_doubler = "00" then
                 point_m_address_i_adder <= Y1_ADS;
                 point_m_address_i_doubler <= Z1_ADS;
             else
-                report "Writing r1y from doubler: " & to_string(point_m_dout_i_doubler) & ", to adder r1y";
                 point_m_address_i_adder <= Y2_ADS;
                 point_m_address_i_doubler <= Z2_ADS;
             end if;
@@ -552,12 +536,10 @@ begin
             point_m_din_i_doubler <= (others => '0');
             point_m_rw_i_doubler <= '0';
             point_m_enable_i_doubler <= '0';
-            if op_o_i_doubler <= "00" then
-                report "Writing r0z from doubler: " & to_string(point_m_dout_i_doubler) & ", to adder r0z";
+            if op_o_i_doubler = "00" then
                 point_m_address_i_adder <= Z1_ADS;
                 point_m_address_i_doubler <= Z1_ADS;
             else
-                report "Writing r1z from doubler: " & to_string(point_m_dout_i_doubler) & ", to adder r1z";
                 point_m_address_i_adder <= Z2_ADS;
                 point_m_address_i_doubler <= Z2_ADS;
             end if;
@@ -613,10 +595,13 @@ begin
              | s_init_x1 | s_init_y1 | s_init_z1
              | s_init_x2 | s_init_y2 | s_init_z2
              | s_add_double_exec
-             | s_sync_adder_doubler_rx | s_sync_adder_doubler_ry
-             | s_sync_adder_doubler_rz | s_sync_adder_doubler_rz2
-             | s_sync_doubler_adder_rx | s_sync_doubler_adder_ry
-             | s_sync_doubler_adder_rz | s_sync_doubler_adder_rz2
+             | s_sync_adder_doubler_rx0 | s_sync_adder_doubler_ry0
+	     | s_sync_adder_doubler_rz0 | s_sync_doubler_adder_rx0
+	     | s_sync_doubler_adder_ry0 | s_sync_doubler_adder_rz0
+             | s_sync_adder_doubler_rx1 | s_sync_adder_doubler_ry1
+             | s_sync_adder_doubler_rz1 | s_sync_adder_doubler_rz2
+             | s_sync_doubler_adder_rx1 | s_sync_doubler_adder_ry1
+             | s_sync_doubler_adder_rz1 | s_sync_doubler_adder_rz2
              | s_result_r0x | s_result_r0y | s_result_r0z =>
             busy <= '1';
             done <= '0';

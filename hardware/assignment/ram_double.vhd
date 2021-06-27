@@ -52,15 +52,6 @@ process(clk)
     begin
         if (rising_edge(clk)) then
             if(enable = '1') then
-                report "P_ADS: " & to_string(memory_ram(0));
-                report "A_ADS: " & to_string(memory_ram(1));
-                report "B_ADS: " & to_string(memory_ram(2));
-                report "X1_ADS: " & to_string(memory_ram(3));
-                report "Y1_ADS: " & to_string(memory_ram(4));
-                report "Z1_ADS: " & to_string(memory_ram(5));
-                report "X2_ADS: " & to_string(memory_ram(6));
-                report "Y2_ADS: " & to_string(memory_ram(7));
-                report "Z2_ADS: " & to_string(memory_ram(8));
                 dout_a <= memory_ram(to_integer(to_01(unsigned(address_a))));
                 dout_b <= memory_ram(to_integer(to_01(unsigned(address_b))));
                 if rw = '1' then
