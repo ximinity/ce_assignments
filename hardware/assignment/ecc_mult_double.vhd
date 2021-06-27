@@ -320,7 +320,7 @@ begin
     end if;
 end process;
 
-FSM_mem: process(state)
+FSM_mem: process(state, prime, a, b, gx, gy, gz)
 begin
     case state is
         when s_comp_init =>
