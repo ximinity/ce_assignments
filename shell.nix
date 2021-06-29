@@ -32,6 +32,7 @@ in pkgs.mkShell {
     python38Packages.pyserial
     qemu
     qemu-utils
+    valgrind
     # Hardware
     ghdl
     gtkwave

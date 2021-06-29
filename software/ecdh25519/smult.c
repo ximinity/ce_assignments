@@ -16,6 +16,8 @@ int crypto_scalarmult(unsigned char *ss, const unsigned char *sk, const unsigned
   t[31] &= 127;
   t[31] |= 64;
 
+  // TODO: conditional
+  // if cls.cofactor==8 and (negative(x*y) or y==0) then this fails
   if(group_ge_unpack(&p, pk)) return -1;
 
   k = p;
@@ -24,6 +26,7 @@ int crypto_scalarmult(unsigned char *ss, const unsigned char *sk, const unsigned
     for(;j>=0;j--)
     {
       group_ge_double(&k, &k);
+      // TODO: conditional
       if((t[i] >> j) & 1) {
         group_ge_add(&k, &k, &p);
       }
